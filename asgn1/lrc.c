@@ -28,12 +28,13 @@ int main(){
   
   //ask for players
   printf("Number of players: ")
-  scanf("%u", players)
+  scanf("%u", &players)
   if (players < 1 || players > 14){		//if not in range 2<i<14. end program		
     return 0
   }
   else(){
- 
+     //print  
+
   //assign money
   for(i = 0; i < players; i++){			//assigning money to amount of players 
     money[i] = 3;				// iterating i=players amount of times
@@ -83,6 +84,7 @@ void roll_dice(int num_rolls){
   for (i = 0; i < num_rolls; i++){
    roll = die[random() % 6];
    if(roll == 0){ //pass left because enum index 0 is Left
+     players[i] = 
    }
    if(roll == 1){ //pass right because enum index 1 is right
    }
@@ -95,5 +97,4 @@ void roll_dice(int num_rolls){
   
 
 }
-
 
