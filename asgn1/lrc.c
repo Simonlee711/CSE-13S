@@ -6,63 +6,80 @@
 #include <stdio.h>
 #include "philos.h"
 #include <stdint.h>
-
-//Global Variables to have:
-int pos = 0;					//position equals 0
-int players = 1;				//minimum players = 1
-int money[14] ;					//money can be assigned up to 14 players - SOURCE: Small Group Tutoring
-int center_pot = 0;				//center pot has no money to begin
-int winner = 0;					//winner is not declared - SOURCE: Small Group Tutoring
+#include <stdlib.h>
 
 //dice enumeration used in roll function
 typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces;
 faces die[] = {LEFT, RIGHT, CENTER, PASS, PASS, PASS };
 
-int main(){
-  
-  //ask for seed to be randomized
-  int seed;
-  printf("Randome Seed: ");
-  scanf("%u", &seed);
-  srandom(seed);
-  
-  //ask for players
-  printf("Number of players: ")
-  scanf("%u", &players)
-  if (players < 1 || players > 14){		//if not in range 2<i<14. end program		
-    return 0
+int main(void){
+  int players;
+  int seed = 0; 
+  //int money_pot = 0;
+  //int winner = 0;
+
+  //enter random seed
+  printf("Random Seed: ");
+  int valid_seed = scanf("%u", &seed);
+  if((valid_seed < 0 || seed < 1)){
+    fprintf(stderr, "Invalid seed\n");
+    return 1;
   }
-  else(){
-     //print  
+  srandom(seed);
+
+
+  //# of players user input
+  printf("Enter Players: ");
+  int valid_players = scanf("%u", &players);
+  if(valid_players < 0 || players > 14 || players < 2){
+    fprintf(stderr, "Invalid number of players\n");
+    return 1;
+  }
 
   //assign money
-  for(i = 0; i < players; i++){			//assigning money to amount of players 
-    money[i] = 3;				// iterating i=players amount of times
-    }	
- 
-  //actual game portion
-  while(winner != 1){				//while loop to simulate game
-    int track_money = money[pos];
-    if(track_money >= 3){				//if money is >= 3 roll 3 times
-	money[i] = roll(3);					//function roll is called 3 times
-      }
-      //move index to the right once
-      if( ){				//if one player remains declare winner
-	  game_winner = players[pos]; 		//winner is player[i]
-	  printf("winner is", game_winner); 	//print winner
-          winner += 1;				//prompt condition to exit while loop
-      }
-      else(){					//else statement returns to beginning of while loop
-	  continue;				
-      }
-      }
+  int money[14];
+  for(int i = 0; i < players; i++){
+    money[i] = 3;
+  }
+  
+  //actual game 
+  int players_in = players;
+  int pos = 0;
+  int dice_roll = 0;
+  while(players_in > 1){
+    printf("%s", philosophers[pos]);
+    printf(" rolls...");
+    if (money[pos] > 3){
+      dice_roll = 3;
+    }else{
+      dice_roll = money[pos];
     }
-    else(){					//last statement represents a skip in turn
-      //move player index one to the right 
-      continue
-
+    
+    //dice enumeration used in roll function
+    typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces;
+    faces die[] = {LEFT, RIGHT, CENTER, PASS, PASS, PASS };
+    
+    for(int i = 0; i < 1; i++){
+       int face_die = die[random() % 6];
+       printf("%d", face_die);
+       switch(face_die){
+	       case LEFT:
+		       printf("rolled left");
+		       break;
+	       case RIGHT:
+		       printf("rolled right");
+	               break;
+	       case CENTER:
+                       printf("rolled center");
+                       break;
+	       case PASS:
+		       printf("pass");
+		       break;
+    }
   }
 }
+}
+/*
 //SOURCE: Darell Long Assignment 1 document
 //PARAMETERS:
 //pos: The position of the current player
@@ -80,21 +97,4 @@ static inline uint8_t right_person(uint8_t pos, uint8_t players) {
   return ((pos + 1) % players); 
 }
 
-void roll_dice(int num_rolls){
-  for (i = 0; i < num_rolls; i++){
-   roll = die[random() % 6];
-   if(roll == 0){ //pass left because enum index 0 is Left
-     players[i] = 
-   }
-   if(roll == 1){ //pass right because enum index 1 is right
-   }
-   if(roll == 2){ //put in center because enum index 2 is center
-   }
-   else(){ //return back to function
-   }
-  return //money
-  }
-  
-
-}
-
+*/
