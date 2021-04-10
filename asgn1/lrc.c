@@ -4,6 +4,7 @@
 // Class & Term: CSE 13s Spring 2021//
 //////////////////////////////////////
 #include "philos.h"
+
 #include <ctype.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -35,7 +36,8 @@ int main(void) {
     printf("Random seed: ");
     uint32_t valid_seed = scanf("%u", &seed);
     if ((valid_seed != 1 || seed < 1)) {
-        fprintf(stderr, "Invalid seed\n");			//tutor Tristan told me to use fprintf to print error messages
+        fprintf(stderr,
+            "Invalid seed\n"); //tutor Tristan told me to use fprintf to print error messages
         return 1;
     }
     srandom(seed);
@@ -44,13 +46,13 @@ int main(void) {
     printf("How many players? ");
     uint32_t valid_players = scanf("%u", &players);
     if (valid_players != 1 || players > 14 || players < 2) {
-        fprintf(stderr, "Invalid number of players\n");		//tutor Tristan taught me to use fprintf
-        return 1;
+        fprintf(stderr, "Invalid number of players\n"); //tutor Tristan taught me to use fprintf
+	return 1;
     }
 
     //assign money
-    uint32_t money[14];						//assigning money to number of players in the game using arrays
-    for (uint32_t i = 0; i < players; i++) {				
+    uint32_t money[14]; //assigning money to number of players in the game using arrays
+    for (uint32_t i = 0; i < players; i++) {
         money[i] = 3;
     }
 
@@ -60,19 +62,23 @@ int main(void) {
     uint32_t dice_roll = 0;
     uint32_t money_pot = 0;
     while (players_in > 1) {
-        printf("%s rolls...", philosophers[pos]);
-        if (money[pos] > 3) {					//Eugene's section broke down the structure of how to determine the rolls
-            dice_roll = 3;
-        } else {
-            dice_roll = money[pos];
-        }
+        if (money[pos]
+            >= 3) { //Eugene's section broke down the structure of how to determine the rolls
+            dice_roll = 3;	
+        }else{
+	    dice_roll = money[pos];
+	}
 
         //dice enumeration used in roll function
         typedef enum faciem { PASS, LEFT, RIGHT, CENTER } faces;
         faces die[] = { LEFT, RIGHT, CENTER, PASS, PASS, PASS };
-
+        
+        if(dice_roll != 0){// this print statement does not print for people who do not roll.
+	for (uint32_t i = 0; i < 1; i++){
+	printf("%s rolls...", philosophers[pos]);
+        }
         for (uint32_t i = 0; i < dice_roll; i++) {
-            faces face_die = die[random() % 6];
+	    faces face_die = die[random() % 6];
             switch (face_die) {
             case LEFT:
                 printf(" gives $1 to %s", philosophers[left_person(pos, players)]);
@@ -89,29 +95,38 @@ int main(void) {
                 money[pos] = money[pos] - 1;
                 money_pot = money_pot + 1;
                 break;
-            case PASS: printf(" gets a pass"); break;
+            default: printf(" gets a pass"); break;
             }
         }
+	}
         //checking for winner
-	players_in = 0;
-        for (uint32_t j = 0; j < players; j++) { 			//tutor Miles advised me to incorporate this to check for winner
-		if (money[j] > 0) {
+        players_in = 0;
+        for (uint32_t j = 0; j < players;
+             j++) { //tutor Miles advised me to incorporate this to check for winner
+            if (money[j] != 0) {
                 players_in += 1;
             }
-	}
+        }
 
         if (players_in == 1) {
-           pos = (pos + 1) % players; 
-	   printf("\n%s wins the $%d pot with $%d left in the bank!\n", philosophers[pos], money_pot,
-                money[pos]);
-            return 0;
-        }
-	
+	uint32_t winner_money = 0;
+        for(uint32_t i = 0; i < players; i++){
+	    if(money[i] != 0){
+            winner_money = money[i];	    
+            printf("\n%s wins the $%d pot with $%d left in the bank!\n", philosophers[i],
+                money_pot, money[i]);
+            return 0;}
+	}
 
+	    }
+	
         //next iteration
-        pos = (pos + 1) % players;
-        printf("\n");
+	if(dice_roll > 0){// so no unnecessary new lines would print
+	printf("\n");
+	}
+	pos = (pos + 1) % players;
         continue;
     }
     return 0;
 }
+
