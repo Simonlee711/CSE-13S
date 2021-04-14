@@ -1,0 +1,3 @@
+EXEC = mathlib-test
+
+SOURCES = $
