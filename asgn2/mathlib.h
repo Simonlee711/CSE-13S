@@ -1,5 +1,7 @@
-#ifndef MATH_LIB_H 
+#ifndef MATH_LIB_H
 #define MATH_LIB_H
+
+#include <stdint.h>
 
 double arcSin(double x);
 
