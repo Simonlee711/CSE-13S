@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#define EPSILON 10e-10
+#define EPSILON 1e-10
 
 static inline double Abs(double x) {
     double pos;
@@ -36,18 +36,37 @@ static double Sqrt(double x) {
     }
     return y;
 }
-
-
+//Taylor Series
+double arcSin(double x){
+    double summation = x;
+    double term = x;
+    double approx = 0;
+    double coefficient = 1;
+    for (double k = 3; Abs( - approx) > EPSILON; k += 2){
+        coefficient = coefficient * ((k-2)/(k-1));
+	term = term * x * x;
+	approx = (term/k) * coefficient;
+        summation += approx;
+    }
+    return summation;
+}
+/*
 //Newtons Method
 double arcSin(double x) {
    double guess = x;
-   double fx = (sin(guess) - x);
-   double dfx = (cos(guess));
-   double Newton = (fx/dfx)
-   while (Abs(fx - x) > EPSILON){
-       guess = guess + (x -
+   double approx = 0.0;
+   double fx = sin(guess) - x;
+   double dfx = cos(guess);
+      for (double i = 0; Abs(approx - guess) > EPSILON; i++){
+         approx = guess - (fx/dfx);
+	 guess = approx;
+         fx = sin(guess) - x;
+         dfx = cos(guess);
    } 
+   return guess;
 }
+*/
+
 double arcCos(double x) {
     double solution;
     double arccos;

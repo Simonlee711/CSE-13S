@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
     if (arSin == 1) {
         printf(" x            arcSin           Library        Difference \n");
         printf(" -            ------           -------        ---------- \n");
-        for (double x = -1.0; x < 1.0; x += 0.1) {
+        for (double x = -1.0000; x < 1.0000; x += 0.10000) {
             printf("% 7.4lf % 16.8lf % 16.8lf % 16.10lf\n", x, arcSin(x), asin(x),
                 arcSin(x) - asin(x));
         }
