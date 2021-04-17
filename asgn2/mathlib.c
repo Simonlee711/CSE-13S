@@ -36,13 +36,14 @@ static double Sqrt(double x) {
     }
     return y;
 }
-//Taylor Series
+
+//Taylor Series - followed Euegen's sections thought logic
 double arcSin(double x){
     double summation = x;
     double term = x;
-    double approx = 0;
-    double coefficient = 1;
-    for (double k = 3; Abs( - approx) > EPSILON; k += 2){
+    double approx = x;
+    double coefficient = 1.0;
+    for (double k = 3; Abs(approx) > EPSILON; k += 2){
         coefficient = coefficient * ((k-2)/(k-1));
 	term = term * x * x;
 	approx = (term/k) * coefficient;
@@ -51,13 +52,13 @@ double arcSin(double x){
     return summation;
 }
 /*
-//Newtons Method
+//Newtons Method - my approximations were very off as they were going farther away from zero
 double arcSin(double x) {
    double guess = x;
    double approx = 0.0;
    double fx = sin(guess) - x;
    double dfx = cos(guess);
-      for (double i = 0; Abs(approx - guess) > EPSILON; i++){
+      for (double i = 0; Abs(guess) > EPSILON; i++){
          approx = guess - (fx/dfx);
 	 guess = approx;
          fx = sin(guess) - x;
@@ -67,6 +68,7 @@ double arcSin(double x) {
 }
 */
 
+// simply used an identity to compute arcCos using arcSin
 double arcCos(double x) {
     double solution;
     double arccos;
@@ -74,14 +76,16 @@ double arcCos(double x) {
     arccos = (M_PI_2 - solution);
     return arccos;
 }
+
+// simply used an identity to compute arcTan using arcSin
 double arcTan(double x) {
-  double equation = (x/(Sqrt(x) + 1));
-  double arctan;
-  arctan = arcSin(equation);
-  return arctan;
+    double equation = (x/(Sqrt(x * x + 1))); 
+    double arctan;
+    arctan = arcSin(equation);
+    return arctan;
 }
 
-//Newtons Method - Darell Long's lecture. Changed variable names for readability
+//Newtons Method - SOURCE: Darell Long's lecture. Changed variable names for readability
 double Log(double x){
    double guess = 1.0;
    double fx = Exp(guess);
