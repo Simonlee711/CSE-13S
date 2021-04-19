@@ -1,4 +1,4 @@
-//SOURCE: Sahiti Section. Helped with Makefile.
+#Source: Sahiti's section showed me how to do makefile
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
