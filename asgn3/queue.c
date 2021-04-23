@@ -3,22 +3,29 @@
 //Sources: Eugene's section
 //Sources: Sahiti's Section
 
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include "queue.h"
+
+
 struct Queue {
   uint32_t head;
   uint32_t tail;
   uint32_t size;
-  uint32_t capacity
+  uint32_t capacity;
   int64_t *items;
-}
+};
 
 Queue *queue_create(uint32_t capacity){
-  queue *q = (queue *)malloc(sizeof(queue));
+  Queue *q = (Queue *)malloc(sizeof(Queue));
   if (q){
-    q->head = 0;
-    q->tail = 0;
-    q->size = size;
-    q->capacity = capacity
-    q->items = (int64_t *)calloc(size, sizeof(int64_t));
+    q->head = 0; //remove
+    q->tail = 0;// insert
+    q->size = 0;
+    q->capacity = capacity;
+    q->items = (int64_t *)malloc(capacity * sizeof(int64_t));
     if(!q->items){
       free(q);
       q = NULL;
@@ -37,28 +44,31 @@ void queue_delete(Queue **q){
 }
 
 bool queue_empty(Queue *q){
-  return q->size == 0
+  return q->size == 0;
 }
 
 bool queue_full(Queue *q){
-  return q->size == q->capacity
+  return q->size == q->capacity;
 }
 
 uint32_t queue_size(Queue *q){
-
+  return q->size;
 }
 
 bool enqueue(Queue *q, int64_t x){
   if(q){
-    if (full_queue(q)) {
+    if (queue_full(q)) {
       return false;
     }
     q->size += 1;
+    
+
     q->items[q->tail] = x;
-    q->tail = (q->tail + 1) % q->cap;
+    q->tail = (q->tail + 1) % q->capacity;
     return true;
 
   }
+  return false;
 }
 
 bool dequeue(Queue *q, int64_t *x){
@@ -67,10 +77,15 @@ if(q->size == 0){
   }
   q->size -= 1;
   *x = q->items[q->head];
-  q->head = (q->head + 1) % q->cap;
+  q->head = (q->head + 1) % q->capacity;
   return true;
 }
 
 void queue_print(Queue *q){
-
+  uint32_t index = q->head; //index is head
+  while(&(q->items[index]) != &(q->items[q->tail])){ //while this address of index of the address of tail your gonna keep going
+      printf("%" PRId64, q->items[index]); //print current index in the queue
+      index = (index + 1) % q->capacity;  //increment the index
+  }
+  printf("%" PRId64, q->items[q->tail]); //prints tail
 }

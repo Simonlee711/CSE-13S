@@ -6,8 +6,10 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <inttypes.h>
+#include "stack.h"
 
-typedef struct Stack{
+struct Stack{
 	uint32_t top;
 	uint32_t capacity;
 	int64_t *items;
@@ -36,13 +38,13 @@ void stack_delete(Stack **s){
   return;
 }
 
-bool stack_push(Stack *s, int64_t){
+bool stack_push(Stack *s, int64_t x){
   s->items[s->top] = x;
   s->top += 1;
   return true;
 }
 
-bool stack_pop(Stack *s, int64_t){
+bool stack_pop(Stack *s, int64_t *x){
   s->top -= 1;
   *x = s->items[s->top];
   return true;
