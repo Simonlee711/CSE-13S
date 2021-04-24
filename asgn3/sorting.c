@@ -59,11 +59,14 @@ int main(int argc, char **argv) {
                 srandom(seeds);
             }
             //make an if statement that takes user sys argv and put that into elements
+
             //assigning values to array
             uint32_t A[elements];
             for (uint32_t j = 0; j < elements; j++) {
                 A[j] = random();
             }
+
+            //Printing Statements;
             uint32_t moves = 0;
             uint32_t compares = 0;
             uint32_t stack_size = 0;
@@ -91,36 +94,33 @@ int main(int argc, char **argv) {
                     printf("%13" PRIu32, A[k]);
                 }
                 printf("\n");
-
-            } 
-	    if(set_member(sorts, quicksort)){
-	      quick_sort_stack(&A[0], elements, &moves, &compares, &stack_size);
-	      printf("Quick Sort (Stack)\n");
-              printf("%d elements, %d moves, %d compares\n" , elements, moves, compares);
-	      printf("Max stack size: %d", stack_size);
-              for (uint32_t k = 0; k < elements; k++) {
-                if (k % 5 == 0) {
-                    printf("\n");
-                }
-                printf("%13" PRIu32, A[k]);
             }
-            printf("\n");
-
-	    }
-	    if(set_member(sorts, QUICKsort)){
-	      quick_sort_queue(&A[0], elements, &moves, &compares, &queue_size);
-	      printf("Quick Sort (Queue)\n");
-              printf("%d elements, %d moves, %d compares\n" , elements, moves, compares);
-	      printf("Max queue size: %d", queue_size);
-              for (uint32_t k = 0; k < elements; k++) {
-                if (k % 5 == 0) {
-                    printf("\n");
+            if (set_member(sorts, quicksort)) {
+                quick_sort_stack(&A[0], elements, &moves, &compares, &stack_size);
+                printf("Quick Sort (Stack)\n");
+                printf("%d elements, %d moves, %d compares\n", elements, moves, compares);
+                printf("Max stack size: %d", stack_size);
+                for (uint32_t k = 0; k < elements; k++) {
+                    if (k % 5 == 0) {
+                        printf("\n");
+                    }
+                    printf("%13" PRIu32, A[k]);
                 }
-                printf("%13" PRIu32, A[k]);
+                printf("\n");
             }
-            printf("\n");
-
-	    }
+            if (set_member(sorts, QUICKsort)) {
+                quick_sort_queue(&A[0], elements, &moves, &compares, &queue_size);
+                printf("Quick Sort (Queue)\n");
+                printf("%d elements, %d moves, %d compares\n", elements, moves, compares);
+                printf("Max queue size: %d", queue_size);
+                for (uint32_t k = 0; k < elements; k++) {
+                    if (k % 5 == 0) {
+                        printf("\n");
+                    }
+                    printf("%13" PRIu32, A[k]);
+                }
+                printf("\n");
+            }
         }
     }
 }

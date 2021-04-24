@@ -60,8 +60,8 @@ bool stack_empty(Stack *s) {
 }
 
 uint32_t stack_size(Stack *s) {
-	printf("%d\n", s->top);
-	return s->top;
+    printf("%d\n", s->top);
+    return s->top;
 }
 
 void stack_print(Stack *s) {

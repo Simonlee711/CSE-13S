@@ -25,7 +25,7 @@ void shell_sort(uint32_t *A, uint32_t n, uint32_t *moves, uint32_t *compares) {
                 *moves += 2;
             }
             A[j] = temp;
-	    *moves += 1;
+            *moves += 1;
         }
     }
 }
