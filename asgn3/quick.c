@@ -14,17 +14,21 @@ int64_t partition(uint32_t *A, int64_t lo, int64_t hi) {
     int64_t j = hi + 1;
     while (i < j) {
         i += 1;
+        //*compares += 1;
         while (A[i] < pivot) {
+            //*compares += 1;
             i += 1;
         }
         j -= 1;
         while (A[j] > pivot) {
             j -= 1;
+            //*compares += 1;
         }
         if (i < j) {
             int64_t temp = A[j];
             A[j] = A[i];
             A[i] = temp;
+            //*moves += 2;
         }
     }
     return j;
@@ -39,18 +43,28 @@ void quick_sort_stack(
     stack_push(make_stack, hi);
     *moves += 1;
     *compares += 1;
-    *stack_size += 1;
+    *stack_size += 2;
     while (!stack_empty(make_stack)) {
         stack_pop(make_stack, &hi);
         stack_pop(make_stack, &lo);
+        *moves += 2;
+        *stack_size -= 2;
         uint32_t p = partition(A, lo, hi);
+        *compares += 9;
+        *moves += 1;
         if (lo < p) {
             stack_push(make_stack, lo);
             stack_push(make_stack, p);
+            *compares += 1;
+            *moves += 2;
+            *stack_size += 2;
         }
         if (hi > p + 1) {
             stack_push(make_stack, p + 1);
             stack_push(make_stack, hi);
+            *compares += 1;
+            *moves += 2;
+            *stack_size += 2;
         }
     }
 
@@ -64,14 +78,17 @@ void quick_sort_queue(
     Queue *make_queue = queue_create(n);
     enqueue(make_queue, lo);
     enqueue(make_queue, hi);
+    *queue_size += 2;
+    *moves += 1;
+    *compares += 1;
     while (!queue_empty(make_queue)) {
-        *compares += 1;
-        *queue_size += 1;
         dequeue(make_queue, &lo);
         dequeue(make_queue, &hi);
         *queue_size -= 2;
+        *moves += 2;
         uint32_t p = partition(A, lo, hi);
-        *compares += 1;
+        *compares += 9;
+        *moves += 1;
         if (lo < p) {
             *moves += 1;
             enqueue(make_queue, lo);

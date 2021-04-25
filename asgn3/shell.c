@@ -13,13 +13,12 @@ void shell_sort(uint32_t *A, uint32_t n, uint32_t *moves, uint32_t *compares) {
             continue;
         }
         for (uint32_t i = gaps[gap]; i < n; i++) {
-            *moves += 1;
+            *compares += 1;
             uint32_t j = i;
             *moves += 1;
             uint32_t temp = A[i];
-            *compares += 1;
             while (j >= gaps[gap] && temp < A[j - (gaps[gap])]) {
-                *compares += 1;
+                *compares += 2;
                 A[j] = A[j - (gaps[gap])];
                 j -= gaps[gap];
                 *moves += 2;

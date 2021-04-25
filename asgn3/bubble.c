@@ -11,14 +11,14 @@ void bubble_sort(uint32_t *A, uint32_t n, uint32_t *moves, uint32_t *compares) {
     while (swapped == true) {
         swapped = false;
         for (uint32_t i = 1; i < c; i++) {
-            (*compares)++;
+            *compares += 1;
             if (A[i] < A[i - 1]) {
                 hold = A[i - 1];
-                (*moves)++;
+                *moves += 1;
                 A[i - 1] = A[i];
-                (*moves)++;
+                *moves += 1;
                 A[i] = hold;
-                (*moves)++;
+                *moves += 1;
                 swapped = true;
             }
         }

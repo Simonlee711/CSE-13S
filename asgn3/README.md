@@ -15,7 +15,12 @@ random numbers instead of the same numbers every time. We also have the
 option to print out a specific amount of elements just so then when 
 organizing a large array we don't have to print that whole finite set. 
 Many files are included in this assignment and are listed in my Design
-Doc, and after running scan-build there were no bugs generated.
+Doc, and after running scan-build there were no bugs generated. However
+the compares and the moves, and the stack-size are very much off for 
+quick.c. I sort of printed out these counts weird because I used a 
+pass by reference so I ended up not being able to count the compares
+and the moves inside the partition. Also there is an error when running
+the command line argument -a and it prints more than I want it too
 
 HOW TO BUILD PROGRAM
 --------------------
