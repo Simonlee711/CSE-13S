@@ -28,7 +28,7 @@ queue.o: queue.c
 clean:
 	rm -f *.o sorting
 
-clang-format:
+format:
 	clang-format -i -style=file sorting.c bubble.c shell.c quick.c stack.c queue.c set.c set.h queue.h stack.h quick.h shell.h bubble.h gaps.h
 
 
