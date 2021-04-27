@@ -18,7 +18,7 @@ typedef enum Sorts {
 
 const char *names[] = { "Bubblesort", "Shellsort", "quicksort", "QUICKsort" };
 
-define OPTIONS "absqQr:n:p:"
+#define OPTIONS "absqQr:n:p:"
 
 int main(int argc, char **argv) {
     int opt = 0;
