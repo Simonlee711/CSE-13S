@@ -1,6 +1,9 @@
 #include "graph.h"
 
+#include "vertices.h"
+
 #include <inttypes.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,52 +15,81 @@ struct Graph {
     uint32_t matrix[VERTICES][VERTICES];
 };
 
-Graph *graph_create(uint32_t vertices, bool undirected){
-  Graph *g = (Graph *)malloc(sizeof(Graph));
-  if (g){
-  g->vertices = vertices;
-  g->undirected = undirected;
-  for(uint32_t i = 0; i < vertices; i ++){
-    visited[i] = 0;
-    for (uint32_t k = 0; k < vertices; k++){
-      Matrix[i][j] = 0;
+Graph *graph_create(uint32_t vertices, bool undirected) {
+    Graph *G = (Graph *) malloc(sizeof(Graph));
+    if (G) {
+        G->vertices = vertices;
+        G->undirected = undirected;
+        for (uint32_t i = 0; i < vertices; i++) {
+            G->visited[i] = false;
+            for (uint32_t j = 0; j < vertices; j++) {
+                G->matrix[i][j] = 0;
+            }
+        }
     }
-  }
-  }
-  
+    return G;
 }
 
 void graph_delete(Graph **G){
-  if (*g){
-    free(*g);
+  if(*G){
+    free(*G);
+    *G = NULL;
   }
-  return
-}
-uint32_t graph_vertices(Graph *G){
-  return vertices;
-}
-  
-bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k){
-  if((0 < i && i <= vertices) && (0 < j && j <= vertices) && (0 < k && k <= vertices)){
-    matrix[i][j] = k; 
-  } 
+  return;
 }
 
-bool graph_has_edge(Graph *G, uint32_t i, uint32_t j){
-  if(matrix[i][j] <= 0){
-    return false
-  } 
-  return true
+uint32_t graph_vertices(Graph *G) {
+    return G->vertices;
 }
-uint32_t graph_edge_weight(Graph *G, uint32_t i, uint32_t j){}
-  if(graph_has_edge(*G, i, j)){
-    return k
-  }
-bool graph_visited(Graph *G, uint32_t v){}
 
-void graph_mark_visited(Graph *G, uint32_t v){}
+bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k) {
+    if ((G != NULL) && ((0 < i && i <= G->vertices) && (0 < j && j <= G->vertices) && (k > 0))) {
+        G->matrix[i][j] = k; //i goes to j
+        if (G->undirected == true) {
+            G->matrix[j][i] = k; // j goes to i
+        }
+        return true;
+    }
+    return false;
+}
 
-void graph_mark_unvisited(Graph *G, uint32_t v){}
+bool graph_has_edge(Graph *G, uint32_t i, uint32_t j) {
+    if (G->matrix[i][j] == 0) {
+        return false;
+    }
+    return true;
+}
+uint32_t graph_edge_weight(Graph *G, uint32_t i, uint32_t j) {
+    if (graph_has_edge(G, i, j)) {
+        return G->matrix[i][j];
+    }
+    return 0;
+}
 
-void graph_print(Graph *G){}
+bool graph_visited(Graph *G, uint32_t v) {
+    if (v <= 0 && v > G->vertices) {
+        return false;
+    }
+    return G->visited[v];
+}
 
+void graph_mark_visited(Graph *G, uint32_t v) {
+    if (v <= 0 && v > G->vertices)
+        return;
+    G->visited[v] = true;
+}
+
+void graph_mark_unvisited(Graph *G, uint32_t v) {
+    if (v <= 0 && v > G->vertices)
+        return;
+    G->visited[v] = false;
+}
+
+void graph_print(Graph *G) {
+    for (uint32_t i = 0; i < G->vertices; i++) {
+        for (uint32_t j = 0; j < G->vertices; j++) {
+            printf("%d ", G->matrix[i][j]);
+        }
+        printf("\n");
+    }
+}

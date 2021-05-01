@@ -63,21 +63,31 @@ bool stack_pop(Stack *s, uint32_t *x) {
     *x = s->items[s->top];
     return true;
 }
-
-bool stack_peek(Stack *s, uint32_t *x){
-
+//tutor Eric Hernandez gave us code
+bool stack_peek(Stack *s, uint32_t *x) {
+    if (stack_empty(s)) {
+        return false;
+    }
+    *x = s->items[s->top - 1];
+    return true;
 }
-
-void stack_copy(Stack *dst, Stack *src){
-
+//tutor Eric's Hernandez gave us code
+void stack_copy(Stack *dst, Stack *src) {
+    if (dst != NULL && src != NULL) {
+        uint32_t len = src->top < dst->capacity ? src->top : dst->capacity;
+        for (uint32_t i = 0; i < len; i++) {
+            dst->items[i] = src->items[i];
+        }
+        dst->top = len;
+    }
 }
 
 void stack_print(Stack *s, FILE *outfile, char *cities[]) {
-    for(uint32_t i = 0; i < s->top; i += 1) {
-	    fprintf(outfile,"%s", cities[s->items[i]]);
-	    if( i+ 1 != s->top) {
-		    fprintf(outfile,"->");
-	    }
+    for (uint32_t i = 0; i < s->top; i += 1) {
+        fprintf(outfile, "%s", cities[s->items[i]]);
+        if (i + 1 != s->top) {
+            fprintf(outfile, "->");
+        }
     }
-    fprintf(outfile,"\n");
+    fprintf(outfile, "\n");
 }
