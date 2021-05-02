@@ -14,17 +14,18 @@
 #define OPTIONS "hvui:o:"
 
 //dfs algorithm based on Professor's pseudocode
-void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *out, bool verbose, uint32_t *recur_count) {
+void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE *out, bool verbose,
+    uint32_t *recur_count) {
     path_push_vertex(curr, v, G);
-        
+
     if (path_vertices(curr) == graph_vertices(G)) { // checking to see if it is shortest path
         if ((path_length(curr) < path_length(shortest)) || (path_length(shortest) == 0)) {
             path_copy(shortest, curr);
         }
     }
 
-    if (path_vertices(curr) == graph_vertices(G)) { //checking if verbose 
-         if (verbose) {
+    if (path_vertices(curr) == graph_vertices(G)) { //checking if verbose
+        if (verbose) {
             fprintf(out, "Path length: %u\n", path_length(curr));
             fprintf(out, "Path: ");
             path_push_vertex(curr, START_VERTEX, G);
@@ -36,7 +37,7 @@ void dfs(Graph *G, uint32_t v, Path *curr, Path *shortest, char *cities[], FILE 
         if (graph_has_edge(G, v, w)) {
             if (graph_visited(G, w) == false) {
                 *recur_count += 1;
-		dfs(G, w, curr, shortest, cities, out, verbose, recur_count);
+                dfs(G, w, curr, shortest, cities, out, verbose, recur_count);
             }
         }
     }
@@ -88,7 +89,7 @@ int main(int argc, char **argv) {
     fscanf(in, "%" SCNd32 " ", &vertices);
     char buffer[1024];
     char *cities[vertices];
-    
+
     for (uint32_t c_count = 0; c_count < vertices; c_count += 1) {
         fgets(buffer, 1024, in);
         cities[c_count] = strdup(buffer);
@@ -98,7 +99,7 @@ int main(int argc, char **argv) {
     while (fscanf(in, "%u %u %u", &i, &j, &k) != EOF) {
         graph_add_edge(G, i, j, k);
     }
-    
+
     //creating two paths
     Path *curr = path_create();
     Path *shortest = path_create();
@@ -108,5 +109,5 @@ int main(int argc, char **argv) {
     fprintf(out, "Path length: %u\n", path_length(shortest));
     fprintf(out, "Path: ");
     path_print(shortest, out, cities);
-    fprintf(out, "Total Recursive Calls: %u\n", recur_count); 
+    fprintf(out, "Total Recursive Calls: %u\n", recur_count);
 }

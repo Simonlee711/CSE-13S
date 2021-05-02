@@ -36,10 +36,10 @@ bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
     if (stack_full(p->vertices)) {
         return false;
     } else {
-        if(stack_empty(p->vertices) == false){
-          uint32_t w;
-	  stack_peek(p->vertices, &w);
-          p->length += graph_edge_weight(G, w, v);
+        if (stack_empty(p->vertices) == false) {
+            uint32_t w;
+            stack_peek(p->vertices, &w);
+            p->length += graph_edge_weight(G, w, v);
         }
         stack_push(p->vertices, v);
         return true;
@@ -51,11 +51,11 @@ bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
         return false;
     } else {
         stack_pop(p->vertices, v);
-	if(stack_empty(p->vertices) == false){
+        if (stack_empty(p->vertices) == false) {
             uint32_t w;
-	    stack_peek(p->vertices, &w);
-	    p->length -= graph_edge_weight(G, w, *v);
-	}
+            stack_peek(p->vertices, &w);
+            p->length -= graph_edge_weight(G, w, *v);
+        }
         return true;
     }
 }

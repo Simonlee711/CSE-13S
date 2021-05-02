@@ -89,7 +89,7 @@ void graph_print(Graph *G) {
     for (uint32_t i = 0; i < G->vertices; i++) {
         for (uint32_t j = 0; j < G->vertices; j++) {
             printf("%u ", G->matrix[i][j]);
-	}
+        }
         printf("\n");
     }
 }
