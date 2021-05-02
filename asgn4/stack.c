@@ -1,7 +1,7 @@
 //Stack implementation
 //Sources: Darrell Long's Lecture Slides and Assignment Document
-//Sources: Eugene's Section
-//Sources: Sahiti's Section
+//Sources: Eugene's Section most functions are imported from asgn3 stack.c
+//Sources: Sahiti's Section most functions are imported from asgn3 stack.c
 
 #include "stack.h"
 
@@ -40,7 +40,6 @@ void stack_delete(Stack **s) {
 }
 
 uint32_t stack_size(Stack *s) {
-    printf("%d\n", s->top);
     return s->top;
 }
 
@@ -74,7 +73,7 @@ bool stack_peek(Stack *s, uint32_t *x) {
 //tutor Eric's Hernandez gave us code
 void stack_copy(Stack *dst, Stack *src) {
     if (dst != NULL && src != NULL) {
-        uint32_t len = src->top < dst->capacity ? src->top : dst->capacity;
+        uint32_t len = src->top;
         for (uint32_t i = 0; i < len; i++) {
             dst->items[i] = src->items[i];
         }

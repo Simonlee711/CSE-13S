@@ -14,7 +14,7 @@ struct Graph {
     bool visited[VERTICES];
     uint32_t matrix[VERTICES][VERTICES];
 };
-
+//SOUCRE Eugene's section
 Graph *graph_create(uint32_t vertices, bool undirected) {
     Graph *G = (Graph *) malloc(sizeof(Graph));
     if (G) {
@@ -30,12 +30,12 @@ Graph *graph_create(uint32_t vertices, bool undirected) {
     return G;
 }
 
-void graph_delete(Graph **G){
-  if(*G){
-    free(*G);
-    *G = NULL;
-  }
-  return;
+void graph_delete(Graph **G) {
+    if (*G) {
+        free(*G);
+        *G = NULL;
+    }
+    return;
 }
 
 uint32_t graph_vertices(Graph *G) {
@@ -43,7 +43,7 @@ uint32_t graph_vertices(Graph *G) {
 }
 
 bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k) {
-    if ((G != NULL) && ((0 < i && i <= G->vertices) && (0 < j && j <= G->vertices) && (k > 0))) {
+    if ((G != NULL) && ((i < G->vertices) && (j < G->vertices))) {
         G->matrix[i][j] = k; //i goes to j
         if (G->undirected == true) {
             G->matrix[j][i] = k; // j goes to i
@@ -67,20 +67,20 @@ uint32_t graph_edge_weight(Graph *G, uint32_t i, uint32_t j) {
 }
 
 bool graph_visited(Graph *G, uint32_t v) {
-    if (v <= 0 && v > G->vertices) {
+    if (v >= G->vertices) {
         return false;
     }
     return G->visited[v];
 }
 
 void graph_mark_visited(Graph *G, uint32_t v) {
-    if (v <= 0 && v > G->vertices)
+    if (v >= G->vertices)
         return;
     G->visited[v] = true;
 }
 
 void graph_mark_unvisited(Graph *G, uint32_t v) {
-    if (v <= 0 && v > G->vertices)
+    if (v >= G->vertices)
         return;
     G->visited[v] = false;
 }
@@ -88,8 +88,8 @@ void graph_mark_unvisited(Graph *G, uint32_t v) {
 void graph_print(Graph *G) {
     for (uint32_t i = 0; i < G->vertices; i++) {
         for (uint32_t j = 0; j < G->vertices; j++) {
-            printf("%d ", G->matrix[i][j]);
-        }
+            printf("%u ", G->matrix[i][j]);
+	}
         printf("\n");
     }
 }

@@ -20,17 +20,13 @@ Path *path_create(void) {
     if (p) {
         p->length = 0;
         p->vertices = stack_create(VERTICES);
-        if (p->vertices == NULL) {
-            free(*p);
-            p = NULL;
-        }
     }
     return p;
 }
 
 void path_delete(Path **p) {
-    if (*p) { 
-        stack_delete((*p)->vertices);
+    if (*p) {
+        stack_delete(&((*p)->vertices));
         free(*p);
         *p = NULL;
     }
@@ -40,9 +36,12 @@ bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
     if (stack_full(p->vertices)) {
         return false;
     } else {
+        if(stack_empty(p->vertices) == false){
+          uint32_t w;
+	  stack_peek(p->vertices, &w);
+          p->length += graph_edge_weight(G, w, v);
+        }
         stack_push(p->vertices, v);
-        uint32_t w;
-        p->length += graph_edge_weight(G, stack_peek(p->vertices, &w), v);
         return true;
     }
 }
@@ -51,9 +50,12 @@ bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
     if (stack_empty(p->vertices)) {
         return false;
     } else {
-        uint32_t w;
-        p->length -= graph_edge_weight(G, stack_peek(p->vertices, &w), *v);
         stack_pop(p->vertices, v);
+	if(stack_empty(p->vertices) == false){
+            uint32_t w;
+	    stack_peek(p->vertices, &w);
+	    p->length -= graph_edge_weight(G, w, *v);
+	}
         return true;
     }
 }
