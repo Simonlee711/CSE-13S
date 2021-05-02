@@ -86,7 +86,10 @@ int main(int argc, char **argv) {
         }
     }
     //Tutor Eric Hernandez code
-    fscanf(in, "%u"  " ", &vertices);
+    fscanf(in,
+        "%u"
+        " ",
+        &vertices);
     char buffer[1024];
     char *cities[vertices];
 
