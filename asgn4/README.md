@@ -6,20 +6,11 @@ as explained in lecture utilizes the stack, while there is also Breadth
 First, Search which utilizes the queue but that has nothing to do with this
 assignment. So in this assignment we had to find a Hamiltonian cycle which is 
 when you visit every vertex of a graph once, and the last vertex has an edge
-right back to the origin. refer to the picture below.
-                    5
-         A ->  O--------->O <- B                  <i,j,k> notation
-                ^        /		             <A,B,5>
-                 \      /			     <B,C,2>
-               3  \    / 2 			     <C,A,3>
-                   \  /  
-                    \v
-                     O <-C
-
+right back to the origin. refer to the following coordinates: <A,B,5>, 
+<B,C,2>, and <C,A,3>.
 
 Quick lesson on graph theory but A,B,C represent the vertices, and the numbers
-5,2,3 represent the edges connecting from nodes i to j. On the left we can see
-the visual representation of the graph while on the right side we have how we 
+5,2,3 represent the edges connecting from nodes i to j. Above we have how we 
 will be reading the adjancency matrix "coordinates". This graph represents a 
 hamiltonian cycle because theres a path from: A-B-C-A. However graphs can also
 be undirected meaning each edge is bidirectional. We can also have a case where
