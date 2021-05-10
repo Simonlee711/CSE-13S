@@ -96,7 +96,6 @@ int main(int argc, char **argv) {
             counter += 2;
             fputc(data, out);
             continue;
-
         }
         if ((ham_decode(H_transpose, byte, &msg1) == HAM_OK)
             || (ham_decode(H_transpose, byte2, &msg2) == HAM_OK)) {
@@ -106,11 +105,10 @@ int main(int argc, char **argv) {
             fputc(data, out);
             continue;
 
-        }
-        else{
-        data = pack_byte(msg2, msg1);
-        counter += 2;
-        fputc(data, out);
+        } else {
+            data = pack_byte(msg2, msg1);
+            counter += 2;
+            fputc(data, out);
         }
     }
     error_rate = ((float) u_counter / counter); //discord told me I can float cast

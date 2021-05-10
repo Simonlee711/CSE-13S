@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
     uint8_t msg2;
     uint8_t code1;
     uint8_t code2;
-    while ((byte = fgetc(in)) != EOF) { 
+    while ((byte = fgetc(in)) != EOF) {
         msg1 = lower_nibble(byte);
         msg2 = upper_nibble(byte);
         code1 = ham_encode(Generator_matrix, msg1);
