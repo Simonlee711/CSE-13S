@@ -6,6 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #define OPTIONS "hi:o:v"
 
@@ -18,16 +19,12 @@ int main(int argc, char **argv) {
         case 'h':
             exit(1);
         case 'i':
-            if ((in = fopen(optarg, "rb")) == NULL) {
-                fprintf(stderr, "failed to open infile\n");
-                exit(1);
+            int in = open(optarg, O_RDONLY);
             }
 
             break;
         case 'o':
-            if ((out = fopen(optarg, "w")) == NULL) {
-                fprintf(stderr, "failed to write outfile\n");
-                exit(1);
+            int out = open(optarg, O_WRONLY|O_CREAT);
             }
             break;
         case 'v':

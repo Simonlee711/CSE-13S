@@ -1,4 +1,5 @@
 #include "stack.h"
+#include "node.h"
 
 #include <inttypes.h>
 #include <stdint.h>
@@ -16,7 +17,7 @@ Stack *stack_create(uint32_t capacity) {
     if (s) {
         s->top = 0;
         s->capacity = capacity;
-        s->items = node_create(top, capacity);
+        s->items = (Node**)malloc(sizeof(Node * capacity);
 
     }
     return s;
@@ -31,15 +32,15 @@ void stack_delete(Stack **s) {
     return;
 }
 
-bool stack_push(Stack *s, int64_t x) {
-    s->items[s->top] = x;
+bool stack_push(Stack *s, Node *n) {
+    s->items[s->top] = n;
     s->top += 1;
     return true;
 }
 
-bool stack_pop(Stack *s, int64_t *x) {
+bool stack_pop(Stack *s, Node *n) {
     s->top -= 1;
-    *x = s->items[s->top];
+    *n = s->items[s->top];
     return true;
 }
 
@@ -52,7 +53,6 @@ bool stack_empty(Stack *s) {
 }
 
 uint32_t stack_size(Stack *s) {
-    printf("%d\n", s->top);
     return s->top;
 }
 
