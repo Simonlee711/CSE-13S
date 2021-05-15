@@ -1,45 +1,37 @@
+#include "node.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "node.h"
 
-/*
-struct Node {
-    Node *left;
-    Node *right;
-    uint8_t symbol;
-    uint64_t frequency;
-};
-*/
-
-Node *node_create(uint8_t symbol, uint64_t frequency){
-  Node *n = (Node*)malloc(sizeof(Node));
-  if(!n){
-    return NULL;
-  }
-  n->left = NULL;
-  n->right = NULL;
-  n->symbol = symbol;
-  n->frequency = frequency;
-  }
-void node_delete(Node **n){
-  if(*n){
-    free(*n);
-    *n = NULL;
+Node *node_create(uint8_t symbol, uint64_t frequency) {
+    Node *n = (Node *) malloc(sizeof(Node));
+    if (!n) {
+        return NULL;
+    }
+    n->left = NULL;
+    n->right = NULL;
+    n->symbol = symbol;
+    n->frequency = frequency;
+    return n;
 }
-return;
+void node_delete(Node **n) {
+    if (*n) {
+        free(*n);
+        *n = NULL;
+    }
+    return;
 }
 
-Node *node_join(Node *left, Node *right){
-  Node *nn = node_create($, left->frequency + right->frequency);  //nn for new node
-    if(!nn){
-      return NULL;
+Node *node_join(Node *left, Node *right) {
+    Node *nn = node_create('$', left->frequency + right->frequency); //nn for new node
+    if (!nn) {
+        return NULL;
     }
     nn->left = left;
     nn->right = right;
     return nn;
 }
 
-void node_print(Node *n){
-}
-
+//void node_print(Node *n) {
+//}

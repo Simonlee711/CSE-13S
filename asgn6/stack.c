@@ -1,4 +1,5 @@
 #include "stack.h"
+
 #include "node.h"
 
 #include <inttypes.h>
@@ -13,12 +14,11 @@ struct Stack {
 };
 
 Stack *stack_create(uint32_t capacity) {
-    Stack *s = (Stack *) malloc(sizeof(Stack));
+    Stack *s = malloc(sizeof(Stack));
     if (s) {
         s->top = 0;
         s->capacity = capacity;
-        s->items = (Node**)malloc(sizeof(Node * capacity);
-
+        s->items = malloc(sizeof(Node) * capacity);
     }
     return s;
 }
@@ -33,12 +33,18 @@ void stack_delete(Stack **s) {
 }
 
 bool stack_push(Stack *s, Node *n) {
+    if (stack_full(s)) {
+        return false;
+    }
     s->items[s->top] = n;
     s->top += 1;
     return true;
 }
 
-bool stack_pop(Stack *s, Node *n) {
+bool stack_pop(Stack *s, Node **n) {
+    if (stack_empty(s)) {
+        return false;
+    }
     s->top -= 1;
     *n = s->items[s->top];
     return true;
@@ -59,11 +65,10 @@ uint32_t stack_size(Stack *s) {
 void stack_print(Stack *s) {
     printf("[");
     for (uint32_t i = 0; i < s->top; i += 1) {
-        printf("%" PRId64, s->items[i]);
+        printf("%" PRId64, s->items[i]->frequency);
         if (i + 1 != s->top) {
             printf(", ");
         }
     }
     printf("]\n");
 }
-

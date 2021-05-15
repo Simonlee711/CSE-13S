@@ -3,10 +3,10 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 LFLAGS = -lm
 all: encode decode entropy
 
-encode: encode.o bm.o bv.o hamming.o
-	$(CC) $(CFLAGS) -o encode encode.o io.o stack.o huffman.o code.o pq.o node.o $(LFLAGS)
+encode: encode.o stack.o code.o pq.o node.o io.o huffman.o
+	$(CC) $(CFLAGS) -o encode encode.o stack.o code.o pq.o node.o io.o huffman.o $(LFLAGS)
 
-decode: decode.o bm.o bv.o hamming.o
+decode: decode.o io.o stack.o huffman.o code.o pq.o node.o
 	$(CC) $(CFLAGS) -o decode decode.o io.o stack.o huffman.o code.o pq.o node.o $(LFLAGS)
 
 entropy: entropy.o
@@ -16,7 +16,7 @@ io.o: io.c
 	$(CC) $(CFLAGS) -c io.c
 
 stack.o: stack.c
-	$(CC) $(CFLAGS) -c satck.c
+	$(CC) $(CFLAGS) -c stack.c
 
 huffman.o: huffman.c
 	$(CC) $(CFLAGS) -c huffman.c

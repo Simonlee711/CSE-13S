@@ -16,8 +16,7 @@ int main(int argc, char **argv) {
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 'h':
-            return 0;
+        case 'h': return 0;
         case 'i':
             if ((in = fopen(optarg, "r")) == NULL) {
                 fprintf(stderr, "failed to open infile\n");
@@ -33,4 +32,4 @@ int main(int argc, char **argv) {
         case 'v': verbose = 1; break;
         }
     }
-
+}
