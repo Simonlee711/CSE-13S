@@ -1,6 +1,8 @@
+#include "io.h"
+
 #include "code.h"
 #include "defines.h"
-#include "io.h"
+
 #include <fcntl.h>
 #include <inttypes.h>
 #include <stdbool.h>
@@ -16,7 +18,6 @@ extern uint64_t bytes_written;
 static uint8_t buffer_r[BLOCK];
 static int32_t pos;
 static uint8_t buffer_w[BLOCK];
-
 
 int read_bytes(int infile, uint8_t *buf, int nbytes) { //tutor eric covered this
     uint32_t total_bytes = 0;
@@ -42,7 +43,7 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
         if (bytes == -1) {
             return 0;
         }
-	//bytes_written += bytes;
+        //bytes_written += bytes;
         total_bytes -= bytes;
         nbytes -= bytes;
         buf += bytes;
@@ -60,7 +61,7 @@ bool read_bit(int infile, uint8_t *bit) {
         if (num_bytes < BLOCK) {
             end = num_bytes + 1;
         }
-	bytes_read = num_bytes;
+        bytes_read = num_bytes;
     }
     *bit = ((buffer_r[pos / 8] >> (pos % 8)) & 1);
     pos += 1;
@@ -71,17 +72,27 @@ bool read_bit(int infile, uint8_t *bit) {
 }
 
 void write_code(int outfile, Code *c) {
-   for(uint32_t i = 0; i < c->top; i++){
-     buffer_w[pos / 8] |= c->bits[i / 8] & (1 << (i % 8));
-     pos += 1;
-     if(pos == BLOCK * 8){
-       bytes_written += write_bytes(outfile, buffer_w, pos);   
-       pos = 0;
-     }
-   }
-     
+    for (uint32_t i = 0; i < c->size; i++) {
+        if (((c->bits[i / 8] >> (i % 8)) & 1) == 1) {
+            buffer_w[pos / 8] |= (1 << (i % 8));
+            pos += 1;
+        }
+        if (((c->bits[i / 8] >> (i % 8)) & 1) == 0) {
+          buffer_w[pos / 8] &= ~(1 << (i % 8);
+          pos += 1;
+        }
+        if (pos == BLOCK * 8) {
+            write_bytes(outfile, buffer_w, (pos / 8));
+            pos = 0;
+        }
+    }
 }
 
 void flush_codes(int outfile) {
-
-}
+    if (pos > 0) {
+        if (pos % 8 == 0) {
+            write_bytes(outfile, buffer_w, (pos / 8))
+        } else {
+            write_bytes(outfile, buffer_w, ((pos / 8) + 1))
+        }
+    }

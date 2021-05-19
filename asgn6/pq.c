@@ -1,6 +1,6 @@
 #include "pq.h"
-
 #include "node.h"
+
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -85,4 +85,22 @@ void pq_print(PriorityQueue *q) {
         index = (index + 1) % q->capacity;
     }
     printf("%" PRId64, q->arr[q->tail]->frequency); //prints tail
+}
+
+int main(void){
+printf("about to make pq");
+PriorityQueue *pq = pq_create(20);
+printf("made pq");
+Node *n = node_create('a', 7);
+Node *a = node_create('b', 5);
+Node *b = node_create('c', 2);
+printf("made nodes");
+enqueue(pq, n);
+enqueue(pq, a);
+enqueue(pq, b);
+pq_print(pq);
+dequeue(pq, &b);
+dequeue(pq, &a);
+pq_print(pq);
+printf("complete");
 }

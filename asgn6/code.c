@@ -32,8 +32,14 @@ bool code_push_bit(Code *c, uint8_t bit) {
     if (c->top == MAX_CODE_SIZE) {
         return false;
     }
-    c->bits[c->top] = bit;
-    c->top += 1;
+    if (bit == 1) {
+        c->bits[c->top / 8] |= (1 << (c->top % 8));
+        c->top += 1;
+    }
+    if (bit == 0) {
+        c->bits[c->top / 8] &= ~(1 << (c->top % 8));
+        c->top += 1;
+    }
     return true;
 }
 
@@ -42,7 +48,7 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
         return false;
     }
     c->top -= 1;
-    *bit = c->bits[c->top];
+    *bit = (c->bits[c->top / 8] >> (c->top % 8)) & 1;
     return true;
 }
 

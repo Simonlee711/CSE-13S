@@ -7,8 +7,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//uint64_t dfs(Node) {
-//}
+void Post_traversal(Node *n, Code *c, Code table) {
+    if (n == NULL) {
+        return;
+    }
+    uint8_t bit;
+    code_push_bit(c, 0);
+    Post_traversal(n->left, c, table);
+    code_pop_bit(c, &bit);
+    code_push_bit(c, 1);
+    Post_traversal(n->right, c, table);
+    code_pop_bit(c, &bit);
+    table[n->symbol] = *c;
+    return;
+}
 
 Node *build_tree(uint64_t hist[static ALPHABET]) {
     PriorityQueue *pq = pq_create(ALPHABET);
@@ -19,7 +31,7 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
         }
     }
     Node *temp;
-    while (pq_size(pq) != 1) {
+    while (pq_size(pq) != 1) { 
         temp = node_create('$', 0);
         Node *temp2 = node_create('$', 0);
         dequeue(pq, &temp);
@@ -30,13 +42,37 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
     dequeue(pq, &temp); //freeing memory could lead to leaks check at the end
     return temp;
 }
-/*
+
 void build_codes(Node *root, Code table[static ALPHABET]) {
+    Code c = code_init(); 
+    Post_traversal(root, &c, table);
 }
 
 Node *rebuild_tree(uint16_t nbytes, uint8_t tree[static nbytes]) {
+    Stack *s = stack_create(nbytes);
+    for (int i = 0; i < nbytes; i++) {
+        if (tree[i] == 'L') {
+            Node *n = create_node(tree[i + 1], 0); //how to access frequency and does it even matter anymore?
+            stack_push(s, n);
+        } else if (tree[i] == 'I') {
+            Node *left_child;
+            Node *right_child;
+            stack_pop(s, &right_child);
+            stack_pop(s, &left_child);
+            stack_push(s, node_join(&left_child, &right_child));
+        }
+    }
+    Node *parent;
+    stack_pop(s, &parent); 
+    return parent;
 }
 
 void delete_tree(Node **root) {
+    if (*root == NULL) {
+        return;
+    }
+    delete_tree(*root->left);
+    delete_tree(*root->right);
+    node_delete(root);
+    return;
 }
-*/
