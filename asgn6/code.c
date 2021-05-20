@@ -16,6 +16,23 @@ Code code_init(void) {
     return c;
 }
 
+//from asgn5
+void set_bit(Code *c, uint32_t i) {
+    c->bits[i / 8] |= (1 << (i % 8));
+    return;
+}
+
+//from asgn5
+void clr_bit(Code *c, uint32_t i) {
+    c->bits[i / 8] &= ~(1 << (i % 8));
+    return;
+}
+
+//from asgn5
+uint8_t get_bit(Code *c, uint32_t i) {
+    return (c->bits[i / 8] >> (i % 8)) & 1;
+}
+
 uint32_t code_size(Code *c) {
     return c->top;
 }
@@ -33,13 +50,14 @@ bool code_push_bit(Code *c, uint8_t bit) {
         return false;
     }
     if (bit == 1) {
-        c->bits[c->top / 8] |= (1 << (c->top % 8));
-        c->top += 1;
+        set_bit(c, c->top);
+        //c->top += 1;
     }
     if (bit == 0) {
-        c->bits[c->top / 8] &= ~(1 << (c->top % 8));
-        c->top += 1;
+        clr_bit(c, c->top);
+        //c->top += 1;
     }
+    c->top += 1;
     return true;
 }
 
@@ -48,17 +66,13 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
         return false;
     }
     c->top -= 1;
-    *bit = (c->bits[c->top / 8] >> (c->top % 8)) & 1;
+    *bit = get_bit(c, c->top);
     return true;
 }
 
 void code_print(Code *c) {
-    printf("[");
-    for (uint32_t i = 0; i < c->top; i += 1) {
-        printf("%u", c->bits[i]);
-        if (i + 1 != c->top) {
-            printf(", ");
-        }
+    for (uint32_t i = 0; i < code_size(c); i++) {
+        printf("%u", get_bit(c, i));
     }
-    printf("]\n");
+    printf("\n");
 }

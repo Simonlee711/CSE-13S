@@ -2,8 +2,8 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
-
 Node *node_create(uint8_t symbol, uint64_t frequency) {
     Node *n = (Node *) malloc(sizeof(Node));
     if (!n) {
@@ -33,5 +33,6 @@ Node *node_join(Node *left, Node *right) {
     return nn;
 }
 
-//void node_print(Node *n) {
-//}
+void node_print(Node *n) {
+    printf("sym: %c, freq: %lu\n", n->symbol, n->frequency);
+}
