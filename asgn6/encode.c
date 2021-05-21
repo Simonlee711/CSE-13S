@@ -2,6 +2,10 @@
 #include "header.h"
 #include "huffman.h"
 #include "io.h"
+#include "defines.h"
+#include "stack.h"
+#include "node.h"
+#include "pq.h"
 
 #include <fcntl.h>
 #include <inttypes.h>
@@ -21,20 +25,21 @@ static uint8_t bytes = 0;
 static uint64_t hist[ALPHABET];
 
 void LIpt(Node *root, uint32_t index, uint8_t *array) { //Leaf and Internal Post Traversal
-    if (root->left == NULL && root->right == NULL)
-        return;
-    LIpt(root->left, index, array);
-    LIpt(root->right, index, array);
-    if (root->symbol == '$') {
-        array[index] = 'I';
+    if (root->left == NULL && root->right == NULL){
         index += 1;
-    } else {
         array[index] = 'L';
         index += 1;
         array[index] = root->symbol;
-        index += 1;
+       return;
+    }else{
+        LIpt(root->left, index, array);
+        LIpt(root->right, index, array);
+        if(root->symbol == '$'){ 
+          array[index] = 'I';
+          index += 1; 
+        }
     }
-    return;
+    //return;
 }
 
 int main(int argc, char **argv) {
@@ -68,7 +73,6 @@ int main(int argc, char **argv) {
         bytes += length;
         for (int i = 0; i < length; i++) {
             hist[buffer[i]] += 1;
-            printf("the populated character +1 %c\n", (char)hist[buffer[i]]);
         }
     }
     hist[0] += 1;
@@ -79,59 +83,62 @@ int main(int argc, char **argv) {
 
     //construct codes
     Code table[ALPHABET] = { 0 };
+    printf("%u", code_size(table));
+    printf(" <- empty code table\n");
     /*
     for (int j = 0; j < ALPHABET; j++) {
         table[j] = code_init();
     }*/
     build_codes(huffman_tree, table);
     code_print(table);
-    printf(" <- code table\n");
+    printf("%u", code_size(table)); 
+    printf(" <- code table & size\n");
+    
     //counter for leaf's
     int leaf_counter = 0;
+    printf("hist values:");
     for (int k = 0; k < ALPHABET; k++) {
         if (hist[k] != 0) {
+            printf(" %c", (char)k);
             leaf_counter += 1;
         }
     }
-    printf("leaf count: %u\n", leaf_counter);    
-    //print histogram
-    for(int i = 0; i < ALPHABET; i++){
-      if(hist[i] != 0){
-        printf("%c", hist[(char)i]);
-      }
-    }
-    printf(" <- histogram characters\n");
+    printf("\nleaf count: %u\n", leaf_counter);    
     //header
     struct stat statbuf;
     fstat(in, &statbuf);
     fchmod(out, statbuf.st_mode);
 
     Header h;
-    h.magic = MAGIC; //change to -> if dot notation doesn't work
+    h.magic = 0xDEADBEEF; //change to -> if dot notation doesn't work
     h.permissions = statbuf.st_mode;
     h.tree_size = ((3 * leaf_counter) - 1);
     h.file_size = statbuf.st_size;
     printf("tree size: %u\n", h.tree_size);
     printf("magic number: %u\n", h.magic);
-    write_bytes(out, (uint8_t *)&h, sizeof(h.magic)); //how to write out the header to outfile???
+    printf("file size: %lu\n", h.file_size);
+    write_bytes(out, (uint8_t *)&h, sizeof(h)); //how to write out the header to outfile???
 
     //build the Leaf and internal post traversal array
     uint32_t array_index = 0;
     uint8_t arr[ALPHABET];
     LIpt(huffman_tree, array_index, arr);
-    write(out, arr, h.tree_size);    
-
+    write_bytes(out, &arr, sizeof(arr));    
+     
     for(int i = 0; i < h.tree_size; i++){
-      printf("%c", arr[i]);
+      printf("%c",arr[i]);
     }
+    printf("\n");
+
+   
     printf(" <- printing LIpt array\n");
     
     //write out to outfile
     lseek(in, 0, SEEK_SET);
-    for (uint64_t sym = 0; sym < h.file_size; sym++) {
-        write_code(out, table);
-    }
-    flush_codes(out);
+    //for (uint64_t sym = 0; sym < h.file_size; sym++) {
+    //    write_code(out, table);
+    //}
+    //flush_codes(out);
 
     //close files
     close(in);

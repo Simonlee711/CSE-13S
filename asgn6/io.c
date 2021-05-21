@@ -19,6 +19,7 @@ static uint8_t buffer_r[BLOCK];
 static int32_t pos;
 static uint8_t buffer_w[BLOCK];
 
+
 int read_bytes(int infile, uint8_t *buf, int nbytes) { //tutor eric covered this
     uint32_t total_bytes = 0;
     int32_t bytes = 0;
@@ -29,28 +30,30 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) { //tutor eric covered this
         total_bytes += bytes;
         nbytes -= bytes;
         buf += bytes;
+        bytes_read += bytes;
         if (nbytes == 0) {
             break;
         }
     }
+    bytes_read = total_bytes;
     return total_bytes;
 }
 
 int write_bytes(int outfile, uint8_t *buf, int nbytes) {
-    uint32_t total_bytes = nbytes;
+    uint32_t total_bytes = 0;
     int32_t bytes = 0;
     while ((bytes = write(outfile, buf, nbytes)) > 0) {
         if (bytes == -1) {
             return 0;
         }
-        //bytes_written += bytes;
-        total_bytes -= bytes;
+        total_bytes += bytes;
         nbytes -= bytes;
         buf += bytes;
         if (nbytes == 0) {
             break;
         }
     }
+    bytes_written = total_bytes;
     return total_bytes;
 }
 
@@ -63,9 +66,9 @@ bool read_bit(int infile, uint8_t *bit) {
         }
         bytes_read = num_bytes;
     }
-    *bit = ((buffer_r[pos / 8] >> (pos % 8)) & 1);
+    *bit = (buffer_r[pos / 8] >> (pos % 8)) & 1;
     pos += 1;
-    if (pos == end) {
+    if (pos == end * 8) {
         return false;
     }
     return true;
@@ -74,11 +77,11 @@ bool read_bit(int infile, uint8_t *bit) {
 void write_code(int outfile, Code *c) {
     for (uint32_t i = 0; i < code_size(c); i++) {
         if (((c->bits[i / 8] >> (i % 8)) & 1) == 1) {
-            buffer_w[pos / 8] |= (1 << (i % 8));
+            buffer_w[i / 8] |= (1 << (i % 8));
             pos += 1;
         }
         if (((c->bits[i / 8] >> (i % 8)) & 1) == 0) {
-          buffer_w[pos / 8] &= ~(1 << (i % 8));
+          (buffer_w[i / 8] &= ~(1 << (i % 8)));
           pos += 1;
         }
         if (pos == BLOCK * 8) {

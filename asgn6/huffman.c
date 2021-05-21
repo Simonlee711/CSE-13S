@@ -10,16 +10,16 @@
 void Post_traversal(Node *n, Code *c, Code table[ALPHABET]) {
     if (n->left == NULL && n->right == NULL) {
         table[n->symbol] = *c;
+        printf("symbol %c, code: %d\n",n->symbol, table[n->symbol]);
         return;
     }
     uint8_t bit;
-    code_push_bit(c, 0); //Sahiti said to add &.
+    code_push_bit(c, 0); 
     Post_traversal(n->left, c, table);
     code_pop_bit(c, &bit);
     code_push_bit(c, 1);
     Post_traversal(n->right, c, table);
     code_pop_bit(c, &bit);
-    return;
 }
 
 Node *build_tree(uint64_t hist[static ALPHABET]) {
@@ -71,10 +71,10 @@ Node *rebuild_tree(uint16_t nbytes, uint8_t tree[static nbytes]) {
 
 void delete_tree(Node **root) {
     if (*root == NULL) {
+        node_delete(root);
         return;
     }
     delete_tree(&(*root)->left);
     delete_tree(&(*root)->right);
-    node_delete(root);
     return;
 }
