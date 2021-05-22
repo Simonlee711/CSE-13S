@@ -52,6 +52,7 @@ uint32_t pq_size(PriorityQueue *q) {
     return q->size;
 }
 
+//erics pseudocode
 bool enqueue(PriorityQueue *q, Node *n) {
     if (pq_full(q)) {
         return false;
@@ -83,6 +84,6 @@ bool dequeue(PriorityQueue *q, Node **n) { //look this over
 
 void pq_print(PriorityQueue *q) {
     for (uint32_t i = 0; i < q->size; i++) {
-        printf("%lu\n", q->arr[i]->frequency);
+        printf("symb! %u freq %lu\n", q->arr[i]->symbol, q->arr[i]->frequency);
     }
 }

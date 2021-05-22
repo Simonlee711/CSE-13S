@@ -31,7 +31,7 @@ node.o: node.c
 	$(CC) $(CFLAGS) -c node.c
 
 clean:
-	rm -f *.o encode decode entropy 
+	rm -f *.o encode decode entropy code 
 
 format:
 	clang-format -i -style=file *.c *.h

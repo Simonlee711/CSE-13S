@@ -72,4 +72,3 @@ void stack_print(Stack *s) {
     }
     printf("]\n");
 }
-

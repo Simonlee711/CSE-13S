@@ -26,26 +26,29 @@ int main(int argc, char **argv) {
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 'h': 
-	printf("SYNOPSIS\n");
-        printf("  A Huffman decoder.\n");
-        printf("  Decompresses a file using the Huffman coding algorithm.\n\n");
-        printf("USAGE\n");
-        printf("  ./decode [-h] [-i infile] [-o outfile]\n\n");
-        printf("OPTIONS\n");
-        printf("  -h             Program usage and help.\n");
-        printf("  -v             Print decompression statistics.\n");
-        printf("  -i infile      Input file to decompress.\n");
-        printf("  -o outfile     Output of decompressed data.\n");
-        return 0;
+        case 'h':
+            printf("SYNOPSIS\n");
+            printf("  A Huffman decoder.\n");
+            printf("  Decompresses a file using the Huffman coding algorithm.\n\n");
+            printf("USAGE\n");
+            printf("  ./decode [-h] [-i infile] [-o outfile]\n\n");
+            printf("OPTIONS\n");
+            printf("  -h             Program usage and help.\n");
+            printf("  -v             Print decompression statistics.\n");
+            printf("  -i infile      Input file to decompress.\n");
+            printf("  -o outfile     Output of decompressed data.\n");
+            return 0;
         case 'i': in = open(optarg, O_RDONLY); break;
         case 'o': out = open(optarg, O_WRONLY | O_CREAT); break;
         case 'v': verbose = 1; break;
         }
     }
     //read in header
-    Header h = {0};
-    read_bytes(in,(uint8_t *)&h, sizeof(Header)); 
+    Header h = { 0 };
+    read_bytes(in, (uint8_t *) &h, sizeof(Header));
+    printf("magic nymber%u\n", h.magic);
+    printf("tree size: %u\n", h.tree_size);
+    printf("file size: %lu\n", h.file_size); 
 
     //rebuild tree;
     uint8_t dump[h.tree_size];
@@ -54,9 +57,13 @@ int main(int argc, char **argv) {
 
     //decompress the message
     uint8_t bit = 0;
+    uint64_t pos = 0;
     Node *curr = root;
-    while (read_bit(in, &bit)) {
-        if (bit == 0) {
+    while (read_bit(in, &bit) > 0) {
+          if(pos == h.file_size){
+            break;
+          }
+          if (bit == 0) {
             if (curr->left == NULL) {
                 write(out, &(curr->symbol), 1);
                 curr = root;
@@ -71,6 +78,7 @@ int main(int argc, char **argv) {
                 curr = curr->right;
             }
         }
+    pos += 1;
     }
     close(in);
     close(out);

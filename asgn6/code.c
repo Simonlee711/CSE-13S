@@ -51,13 +51,13 @@ bool code_push_bit(Code *c, uint8_t bit) {
     }
     if (bit == 1) {
         set_bit(c, c->top);
-        //c->top += 1;
+        c->top += 1;
     }
     if (bit == 0) {
         clr_bit(c, c->top);
-        //c->top += 1;
+        c->top += 1;
     }
-    c->top += 1;
+    //c->top += 1;
     return true;
 }
 
@@ -70,9 +70,37 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
     return true;
 }
 
+/*
 void code_print(Code *c) {
     for (uint32_t i = 0; i < code_size(c); i--) {
-        printf("%u", get_bit(c, i));
+        printf("code %u iteration %u", get_bit(c, i), i);
     }
     printf("\n");
 }
+*/
+
+void code_print(Code *c) {
+    printf("[");
+    for (uint32_t i = 0; i <= ((c->top) / 8); i++) {
+        printf("%x", c->bits[i]);
+    }
+    printf("]\n");
+}
+/*
+int main(void){
+   int bit;
+   Code c = code_init();
+   Code k = code_init();
+   code_push_bit(&c, 1);
+   printf("code 1 Push: ");
+   code_print(&c);
+   code_push_bit(&c, 0);
+   printf("code 1 Push: ");
+   code_print(&c);
+   code_push_bit(&k, 1);
+   printf("code 2 Push: ");
+   code_print(&k);
+   code_push_bit(&k, 1);
+   printf("code 2 Push: ");
+   code_print(&k);
+}*/
