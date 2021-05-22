@@ -19,19 +19,6 @@ static uint8_t buffer_r[BLOCK];
 static int32_t pos;
 static uint8_t buffer_w[BLOCK];
 
-//Sabrina's sections method
-/*int read_bytes(int infile, uint8_t *buf, int nbytes) {
-    int total_bytes = 0;
-    int32_t bytes = 0;
-    do {
-        bytes = read(infile, (buf + total_bytes), (nbytes - total_bytes));
-        total_bytes += bytes;
-        buf += bytes;
-        nbytes -= bytes;
-    } while (total_bytes != nbytes && bytes > -1);
-    bytes_read = total_bytes;
-    return total_bytes;
-}*/
 
 int read_bytes(int infile, uint8_t *buf, int nbytes) { //tutor eric covered this
     uint32_t total_bytes = 0;
@@ -53,21 +40,6 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) { //tutor eric covered this
 }
 
 
-// Sabrina's section method 
-/*int write_bytes(int outfile, uint8_t *buf, int nbytes) {
-    int total_bytes = 0;
-    int32_t bytes = 0;
-    do {
-        bytes = write(outfile, (buf + total_bytes), (nbytes - total_bytes));
-        total_bytes += bytes;
-        buf += bytes;
-        nbytes -= bytes;
-    	printf("tot: %u, nbytes: %u bytes: %u\n", total_bytes, nbytes, bytes);
-    } while (total_bytes != nbytes && bytes > -1);
-    bytes_written = total_bytes;
-    return total_bytes;
-}*/
-
 int write_bytes(int outfile, uint8_t *buf, int nbytes) {
     uint32_t total_bytes = 0;
     int32_t bytes = 0;
@@ -78,7 +50,7 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
         total_bytes += bytes;
         nbytes -= bytes;
         buf += bytes;
-        printf("tot: %u, nbytes: %u bytes: %u\n", total_bytes, nbytes, bytes);
+        //printf("tot: %u, nbytes: %u bytes: %u\n", total_bytes, nbytes, bytes);
         if (nbytes == 0) {
             break;
         }
@@ -106,17 +78,26 @@ bool read_bit(int infile, uint8_t *bit) {
 }
 
 void write_code(int outfile, Code *c) {
+    //pos = 0;
     for (uint32_t i = 0; i < code_size(c); i++) {
+        //printf("iterator %u\n", pos);
         if (((c->bits[i / 8] >> (i % 8)) & 1) == 1) {
-            buffer_w[i / 8] |= (1 << (i % 8));
+            buffer_w[(pos / 8)] |= (1 << (i % 8));
+            printf("%u\n", buffer_w[(pos/8)]);
+            //c->bits[i / 8] |= (1 << (i % 8));
             pos += 1;
         }
+        //else{
         if (((c->bits[i / 8] >> (i % 8)) & 1) == 0) {
-            (buffer_w[i / 8] &= ~(1 << (i % 8)));
+            (buffer_w[(pos / 8)] &= ~(1 << (i % 8)));
             pos += 1;
         }
         if (pos == BLOCK * 8) {
+            for(int i = 0; i < pos; i++){
+              printf("%u", buffer_w[(pos/8)]);
+            }
             write_bytes(outfile, buffer_w, (pos / 8));
+            write_bytes(STDOUT_FILENO, buffer_w, (pos/8));
             pos = 0;
         }
     }

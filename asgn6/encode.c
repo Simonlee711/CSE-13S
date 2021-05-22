@@ -84,6 +84,9 @@ int main(int argc, char **argv) {
 
     //construct codes
     Code table[ALPHABET];
+    for(int i = 0; i < ALPHABET; i++){
+       table[i] = code_init();
+    }
     build_codes(huffman_tree, table);
 
     //print code table
@@ -118,7 +121,6 @@ int main(int argc, char **argv) {
     //printf("tree size: %u\n", h.tree_size);
     //printf("magic number: %u\n", h.magic);
     printf("file size: %lu\n", h.file_size);
-    printf("dog %lu\n", h.file_size);
     write_bytes(out, (uint8_t *)&h, sizeof(h)); 
 
     //build the Leaf and internal post traversal array
@@ -131,16 +133,21 @@ int main(int argc, char **argv) {
         arr[i] = temp->symbol;
         node_delete(&temp);
     }
-    //write_bytes(out, arr, sizeof(arr));
+    write_bytes(out, arr, sizeof(arr));
     //printf("\n");
     //write out to outfile
     lseek(in, 0, SEEK_SET);
+    uint8_t bit;
     for (uint64_t sym = 0; sym < h.file_size; sym++) {
-        write_code(out, &table[sym]);
+     read_bytes(in, &bit, 1);
+        if(table[bit].top != 0){
+          //code_print(&table[bit]);
+          write_code(out, &table[bit]);
     }
     flush_codes(out);
 
     //close files
     close(in);
     close(out);
+    }
 }
