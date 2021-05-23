@@ -60,9 +60,11 @@ Node *rebuild_tree(uint16_t nbytes, uint8_t tree[static nbytes]) {
         } else if (tree[i] == 'I') {
             Node *left_child;
             Node *right_child;
+            Node *parent = node_create('$', 0);
             stack_pop(s, &right_child);
             stack_pop(s, &left_child);
-            stack_push(s, node_join(left_child, right_child));
+            parent = node_join(left_child, right_child);
+            stack_push(s, parent);
         }
     }
     Node *parent;

@@ -67,6 +67,7 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
     }
     c->top -= 1;
     *bit = get_bit(c, c->top);
+    clr_bit(c, c->top);
     return true;
 }
 

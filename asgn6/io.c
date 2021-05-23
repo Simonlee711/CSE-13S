@@ -62,15 +62,15 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
 
 bool read_bit(int infile, uint8_t *bit) {
     int32_t end = -1;
-    if (pos == 0 || pos == BLOCK * 8) {
+    //printf("bit %d\n", pos);
+    if (pos == 0 ||  ((pos % (BLOCK * 8)) == 0)) {
         int num_bytes = read_bytes(infile, buffer_r, BLOCK);
-        if (num_bytes < BLOCK) {
-            end = num_bytes + 1;
+        if (num_bytes != BLOCK) {
+            end = (8 * num_bytes) + 1;
         }
-        bytes_read = num_bytes;
     }
-    *bit = (buffer_r[pos / 8] >> (pos % 8)) & 1;
-    pos += 1;
+    *bit = (buffer_w[pos / 8] >> (pos % 8)) & 1;
+    pos = (pos + 1) % (BLOCK * 8);
     if (pos == end * 8) {
         return false;
     }
@@ -78,35 +78,26 @@ bool read_bit(int infile, uint8_t *bit) {
 }
 
 void write_code(int outfile, Code *c) {
-    //pos = 0;
     for (uint32_t i = 0; i < code_size(c); i++) {
-        //printf("iterator %u\n", pos);
         if (((c->bits[i / 8] >> (i % 8)) & 1) == 1) {
-            buffer_w[(pos / 8)] |= (1 << (i % 8));
-            printf("%u\n", buffer_w[(pos/8)]);
-            //c->bits[i / 8] |= (1 << (i % 8));
-            pos += 1;
+            buffer_w[(pos / 8)] |= (1 << (pos % 8));
         }
-        //else{
         if (((c->bits[i / 8] >> (i % 8)) & 1) == 0) {
-            (buffer_w[(pos / 8)] &= ~(1 << (i % 8)));
-            pos += 1;
+            (buffer_w[(pos / 8)] &= ~(1 << (pos % 8)));
         }
+        pos += 1;
         if (pos == BLOCK * 8) {
-            for(int i = 0; i < pos; i++){
-              printf("%u", buffer_w[(pos/8)]);
-            }
-            write_bytes(outfile, buffer_w, (pos / 8));
-            write_bytes(STDOUT_FILENO, buffer_w, (pos/8));
+            write_bytes(outfile, buffer_w, BLOCK);
             pos = 0;
+	    }
         }
-    }
 }
+     
 
 void flush_codes(int outfile) {
     if (pos > 0) {
         if (pos % 8 == 0) {
-            write_bytes(outfile, buffer_w, (pos / 8));
+            write_bytes(outfile, buffer_w, (pos/8));
         } else {
             write_bytes(outfile, buffer_w, ((pos / 8) + 1));
         }

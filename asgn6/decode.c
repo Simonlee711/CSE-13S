@@ -44,12 +44,23 @@ int main(int argc, char **argv) {
         }
     }
     //read in header
-    Header h = { 0 };
+    Header h = {0};
     read_bytes(in, (uint8_t *) &h, sizeof(Header));
-    printf("magic nymber%u\n", h.magic);
+    printf("magic nymber: %u\n", h.magic);
     printf("tree size: %u\n", h.tree_size);
     printf("file size: %lu\n", h.file_size); 
 
+    //header check
+    if(h.magic != 0xDEADBEEF){
+      fprintf(stderr, "*** Invalid Magic Number ***\n");
+      return 0;
+    }
+
+    //file permission
+    struct stat statbuf;
+    fstat(in, &statbuf);
+    fchmod(out, statbuf.st_mode);
+    
     //rebuild tree;
     uint8_t dump[h.tree_size];
     read(in, dump, h.tree_size);
@@ -65,14 +76,14 @@ int main(int argc, char **argv) {
           }
           if (bit == 0) {
             if (curr->left == NULL) {
-                write(out, &(curr->symbol), 1);
+                write_bytes(out, &(curr->symbol), 1);
                 curr = root;
             } else {
                 curr = curr->left;
             }
         } else {
             if (curr->right == NULL) {
-                write(out, &(curr->symbol), 1);
+                write_bytes(out, &(curr->symbol), 1);
                 curr = root;
             } else {
                 curr = curr->right;

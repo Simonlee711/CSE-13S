@@ -39,7 +39,6 @@ void LIpt(Node *root, Stack **s) { //Leaf and Internal Post Traversal
         Node *I = node_create('I', 0);
         stack_push(*s, I);
     }
-
 }
 
 int main(int argc, char **argv) {
@@ -61,7 +60,7 @@ int main(int argc, char **argv) {
             printf("  -o outfile     Output of compressed data.\n");
             exit(1);
         case 'i': in = open(optarg, O_RDONLY); break;
-        case 'o': out = open(optarg, O_WRONLY | O_CREAT); break;
+        case 'o': out = open(optarg, O_WRONLY | O_CREAT | O_TRUNC); break;
         case 'v': verbose = 1; break;
         }
     }
@@ -84,25 +83,23 @@ int main(int argc, char **argv) {
 
     //construct codes
     Code table[ALPHABET];
-    for(int i = 0; i < ALPHABET; i++){
-       table[i] = code_init();
+    for (int i = 0; i < ALPHABET; i++) {
+        table[i] = code_init();
     }
     build_codes(huffman_tree, table);
 
     //print code table
-    for (int i = 0; i < ALPHABET; i++) {
+    /*for (int i = 0; i < ALPHABET; i++) {
         if (hist[i] != 0) {
             printf("code values!!!! char: %c code: ", (char) i);
             code_print(&table[i]);
         }
-    }
+    }*/
 
     //counter for leaf's
     int leaf_counter = 0;
-    //printf("hist values:");
     for (int k = 0; k < ALPHABET; k++) {
         if (hist[k] != 0) {
-            //printf(" %c", (char) k);
             leaf_counter += 1;
         }
     }
@@ -114,14 +111,14 @@ int main(int argc, char **argv) {
     fchmod(out, statbuf.st_mode);
 
     Header h;
-    h.magic = 0xDEADBEEF; //change to -> if dot notation doesn't work
+    h.magic = MAGIC; //change to -> if dot notation doesn't work
     h.permissions = statbuf.st_mode;
     h.tree_size = ((3 * leaf_counter) - 1);
     h.file_size = statbuf.st_size;
     //printf("tree size: %u\n", h.tree_size);
     //printf("magic number: %u\n", h.magic);
-    printf("file size: %lu\n", h.file_size);
-    write_bytes(out, (uint8_t *)&h, sizeof(h)); 
+    //printf("file size: %lu\n", h.file_size);
+    write_bytes(out, (uint8_t *) &h, sizeof(h));
 
     //build the Leaf and internal post traversal array
     Stack *s = stack_create(h.tree_size);
@@ -134,20 +131,24 @@ int main(int argc, char **argv) {
         node_delete(&temp);
     }
     write_bytes(out, arr, sizeof(arr));
-    //printf("\n");
+
     //write out to outfile
     lseek(in, 0, SEEK_SET);
     uint8_t bit;
     for (uint64_t sym = 0; sym < h.file_size; sym++) {
-     read_bytes(in, &bit, 1);
-        if(table[bit].top != 0){
-          //code_print(&table[bit]);
-          write_code(out, &table[bit]);
+        read_bytes(in, &bit, 1);
+        if (table[bit].top != 0) {
+            //code_print(&table[bit]);
+            write_code(out, &table[bit]);
+        }
     }
     flush_codes(out);
-
-    //close files
-    close(in);
-    close(out);
-    }
+    if (verbose) {
+         printf("uncompressed file size: %lu\n", h.file_size);
+         printf("compressed file size: \n");
+         printf("Space saving\n");
+         }
+	//close files
+         close(in);
+         close(out);
 }
