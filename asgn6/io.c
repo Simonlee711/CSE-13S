@@ -19,7 +19,6 @@ static uint8_t buffer_r[BLOCK];
 static int32_t pos;
 static uint8_t buffer_w[BLOCK];
 
-
 int read_bytes(int infile, uint8_t *buf, int nbytes) { //tutor eric covered this
     uint32_t total_bytes = 0;
     int32_t bytes = 0;
@@ -50,7 +49,6 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
         total_bytes += bytes;
         nbytes -= bytes;
         buf += bytes;
-        //printf("tot: %u, nbytes: %u bytes: %u\n", total_bytes, nbytes, bytes);
         if (nbytes == 0) {
             break;
         }

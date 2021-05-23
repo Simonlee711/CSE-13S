@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -Wall -Wextra -Wpedantic #include -Werror
+CFLAGS = -Wall -Wextra -Werror -Wpedantic 
 LFLAGS = -lm
 all: encode decode entropy
 

@@ -67,11 +67,11 @@ int main(int argc, char **argv) {
 
     //make histogram
     //SOURCE: Proffessor Long's example from class to construct histogram
-    int length;
-    uint8_t buffer[BLOCK] = { 0 };
+    int length = 0;
+    uint8_t buffer[BLOCK];
     while ((length = read(in, buffer, sizeof(BLOCK)) > 0)) {
         bytes += length;
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < length + 1; i++) {
             hist[buffer[i]] += 1;
         }
     }
@@ -88,14 +88,6 @@ int main(int argc, char **argv) {
     }
     build_codes(huffman_tree, table);
 
-    //print code table
-    /*for (int i = 0; i < ALPHABET; i++) {
-        if (hist[i] != 0) {
-            printf("code values!!!! char: %c code: ", (char) i);
-            code_print(&table[i]);
-        }
-    }*/
-
     //counter for leaf's
     int leaf_counter = 0;
     for (int k = 0; k < ALPHABET; k++) {
@@ -103,7 +95,6 @@ int main(int argc, char **argv) {
             leaf_counter += 1;
         }
     }
-    //printf("\nleaf count: %u\n", leaf_counter);
 
     //header
     struct stat statbuf;
@@ -115,9 +106,6 @@ int main(int argc, char **argv) {
     h.permissions = statbuf.st_mode;
     h.tree_size = ((3 * leaf_counter) - 1);
     h.file_size = statbuf.st_size;
-    //printf("tree size: %u\n", h.tree_size);
-    //printf("magic number: %u\n", h.magic);
-    //printf("file size: %lu\n", h.file_size);
     write_bytes(out, (uint8_t *) &h, sizeof(h));
 
     //build the Leaf and internal post traversal array
@@ -135,20 +123,40 @@ int main(int argc, char **argv) {
     //write out to outfile
     lseek(in, 0, SEEK_SET);
     uint8_t bit;
+    uint64_t byte_counter = 0;
+    uint64_t bit_counter = 0;
     for (uint64_t sym = 0; sym < h.file_size; sym++) {
         read_bytes(in, &bit, 1);
         if (table[bit].top != 0) {
-            //code_print(&table[bit]);
             write_code(out, &table[bit]);
         }
+        bit_counter += code_size(&table[bit]); 
     }
     flush_codes(out);
+    
+    //calculating bytes compressed
+    if (bit_counter <= 8){
+      byte_counter = 1;
+    }
+    else{
+      if((bit_counter % 8) == 0){
+        byte_counter = bit_counter / 8;
+      }
+      else{
+        byte_counter = (bit_counter / 8) + 1;
+      }
+    }
+
+    //verbose printing
     if (verbose) {
          printf("uncompressed file size: %lu\n", h.file_size);
-         printf("compressed file size: \n");
-         printf("Space saving\n");
+         double total = sizeof(h) + sizeof(arr) + byte_counter;
+         printf("compressed file size: %0.0f\n", total);
+         double all_bytes = h.file_size;
+         printf("Space saving: %0.2f%%\n", (1.0 - (total / all_bytes)) * 100.0);
          }
-	//close files
-         close(in);
-         close(out);
+
+    //close files
+    close(in);
+    close(out);
 }

@@ -68,8 +68,9 @@ int main(int argc, char **argv) {
     uint64_t pos = 0;
     Node *curr = root;
     uint32_t bits = 0;
+    double byte_counter;
     while ((bits = read_bit(in, &bit)) > 0) {
-          if(pos == h.file_size){
+          if(pos == h.file_size + 1){
             break;
           }
           if (bit == 0) {
@@ -85,10 +86,31 @@ int main(int argc, char **argv) {
                 curr = root;
             } else {
                 curr = curr->right;
-            }
+            }   
         }
     pos += 1;
     }
+    //calculating bytes to decompress
+    if ((pos) <= 8){
+       byte_counter = 1;
+    }
+    else{
+      if(((pos) % 8) == 0){
+         byte_counter = (pos) / 8;
+      }
+      else{
+        byte_counter = ((pos) / 8) + 1;
+      }
+    }
+    
+    //verbose printing
+    if (verbose) {
+         printf("compressed file size: %0.0f\n", byte_counter);
+         printf("uncompressed file size %lu: \n", h.file_size);
+         double all_bytes = h.file_size;
+         printf("Space saving: %0.2f%%\n", (1.0 - (byte_counter/all_bytes)) * 100);
+         }
+
     close(in);
     close(out);
 }
