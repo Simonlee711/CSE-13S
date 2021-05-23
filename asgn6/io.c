@@ -38,7 +38,6 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) { //tutor eric covered this
     return total_bytes;
 }
 
-
 int write_bytes(int outfile, uint8_t *buf, int nbytes) {
     uint32_t total_bytes = 0;
     int32_t bytes = 0;
@@ -57,10 +56,9 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
     return total_bytes;
 }
 
-
 bool read_bit(int infile, uint8_t *bit) {
     int32_t end = -1;
-    if (pos == 0 ||  ((pos % (BLOCK * 8)) == 0)) {
+    if (pos == 0 || ((pos % (BLOCK * 8)) == 0)) {
         int num_bytes = read_bytes(infile, buffer_r, BLOCK);
         if (num_bytes != BLOCK) {
             end = (8 * num_bytes) + 1;
@@ -86,15 +84,14 @@ void write_code(int outfile, Code *c) {
         if (pos == BLOCK * 8) {
             write_bytes(outfile, buffer_w, BLOCK);
             pos = 0;
-	    }
         }
+    }
 }
-     
 
 void flush_codes(int outfile) {
     if (pos > 0) {
         if (pos % 8 == 0) {
-            write_bytes(outfile, buffer_w, (pos/8));
+            write_bytes(outfile, buffer_w, (pos / 8));
         } else {
             write_bytes(outfile, buffer_w, ((pos / 8) + 1));
         }

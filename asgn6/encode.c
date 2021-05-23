@@ -130,31 +130,29 @@ int main(int argc, char **argv) {
         if (table[bit].top != 0) {
             write_code(out, &table[bit]);
         }
-        bit_counter += code_size(&table[bit]); 
+        bit_counter += code_size(&table[bit]);
     }
     flush_codes(out);
-    
+
     //calculating bytes compressed
-    if (bit_counter <= 8){
-      byte_counter = 1;
-    }
-    else{
-      if((bit_counter % 8) == 0){
-        byte_counter = bit_counter / 8;
-      }
-      else{
-        byte_counter = (bit_counter / 8) + 1;
-      }
+    if (bit_counter <= 8) {
+        byte_counter = 1;
+    } else {
+        if ((bit_counter % 8) == 0) {
+            byte_counter = bit_counter / 8;
+        } else {
+            byte_counter = (bit_counter / 8) + 1;
+        }
     }
 
     //verbose printing
     if (verbose) {
-         printf("uncompressed file size: %lu\n", h.file_size);
-         double total = sizeof(h) + sizeof(arr) + byte_counter;
-         printf("compressed file size: %0.0f\n", total);
-         double all_bytes = h.file_size;
-         printf("Space saving: %0.2f%%\n", (1.0 - (total / all_bytes)) * 100.0);
-         }
+        printf("uncompressed file size: %lu\n", h.file_size);
+        double total = sizeof(h) + sizeof(arr) + byte_counter;
+        printf("compressed file size: %0.0f\n", total);
+        double all_bytes = h.file_size;
+        printf("Space saving: %0.2f%%\n", (1.0 - (total / all_bytes)) * 100.0);
+    }
 
     //close files
     close(in);

@@ -44,72 +44,71 @@ int main(int argc, char **argv) {
         }
     }
     //read in header
-    Header h = {0};
+    Header h = { 0 };
     read_bytes(in, (uint8_t *) &h, sizeof(Header));
 
     //header check
-    if(h.magic != 0xDEADBEEF){
-      fprintf(stderr, "*** Invalid Magic Number ***\n");
-      return 0;
+    if (h.magic != 0xDEADBEEF) {
+        fprintf(stderr, "*** Invalid Magic Number ***\n");
+        return 0;
     }
 
     //file permission
     struct stat statbuf;
     fstat(in, &statbuf);
     fchmod(out, statbuf.st_mode);
-    
+
     //rebuild tree;
     uint8_t dump[h.tree_size];
     read(in, dump, h.tree_size);
     Node *root = rebuild_tree(h.tree_size, dump);
 
     //decompress the message
-    uint8_t bit;// = 0;
+    uint8_t bit; // = 0;
     uint64_t pos = 0;
     Node *curr = root;
     uint32_t bits = 0;
     double byte_counter;
     while ((bits = read_bit(in, &bit)) > 0) {
-          if(pos == h.file_size + 1){
+        if (pos == h.file_size + 1) {
             break;
-          }
-          if (bit == 0) {
+        }
+        if (bit == 0) {
             if (curr->left == NULL) {
                 write_bytes(out, &(curr->symbol), 1);
                 curr = root;
             } else {
                 curr = curr->left;
             }
-        } if(bit == 1) {
+        }
+        if (bit == 1) {
             if (curr->right == NULL) {
                 write_bytes(out, &(curr->symbol), 1);
                 curr = root;
             } else {
                 curr = curr->right;
-            }   
+            }
         }
-    pos += 1;
+        pos += 1;
     }
     //calculating bytes to decompress
-    if ((pos) <= 8){
-       byte_counter = 1;
+    if ((pos) <= 8) {
+        byte_counter = 1;
+    } else {
+        if (((pos) % 8) == 0) {
+            byte_counter = (pos) / 8;
+        } else {
+            byte_counter = ((pos) / 8) + 1;
+        }
     }
-    else{
-      if(((pos) % 8) == 0){
-         byte_counter = (pos) / 8;
-      }
-      else{
-        byte_counter = ((pos) / 8) + 1;
-      }
-    }
-    
+
     //verbose printing
     if (verbose) {
-         printf("compressed file size: %0.0f\n", byte_counter);
-         printf("uncompressed file size %lu: \n", h.file_size);
-         double all_bytes = h.file_size;
-         printf("Space saving: %0.2f%%\n", (1.0 - (byte_counter/all_bytes)) * 100);
-         }
+        printf("compressed file size: %0.0f\n", byte_counter);
+        printf("uncompressed file size %lu: \n", h.file_size);
+        double all_bytes = h.file_size;
+        printf("Space saving: %0.2f%%\n", (1.0 - (byte_counter / all_bytes)) * 100);
+    }
 
     close(in);
     close(out);
