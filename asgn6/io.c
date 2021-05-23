@@ -62,14 +62,13 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
 
 bool read_bit(int infile, uint8_t *bit) {
     int32_t end = -1;
-    //printf("bit %d\n", pos);
     if (pos == 0 ||  ((pos % (BLOCK * 8)) == 0)) {
         int num_bytes = read_bytes(infile, buffer_r, BLOCK);
         if (num_bytes != BLOCK) {
             end = (8 * num_bytes) + 1;
         }
     }
-    *bit = (buffer_w[pos / 8] >> (pos % 8)) & 1;
+    *bit = (buffer_r[pos / 8] >> (pos % 8)) & 1;
     pos = (pos + 1) % (BLOCK * 8);
     if (pos == end * 8) {
         return false;

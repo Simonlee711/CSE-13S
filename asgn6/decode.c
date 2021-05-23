@@ -46,9 +46,6 @@ int main(int argc, char **argv) {
     //read in header
     Header h = {0};
     read_bytes(in, (uint8_t *) &h, sizeof(Header));
-    printf("magic nymber: %u\n", h.magic);
-    printf("tree size: %u\n", h.tree_size);
-    printf("file size: %lu\n", h.file_size); 
 
     //header check
     if(h.magic != 0xDEADBEEF){
@@ -67,10 +64,11 @@ int main(int argc, char **argv) {
     Node *root = rebuild_tree(h.tree_size, dump);
 
     //decompress the message
-    uint8_t bit = 0;
+    uint8_t bit;// = 0;
     uint64_t pos = 0;
     Node *curr = root;
-    while (read_bit(in, &bit) > 0) {
+    uint32_t bits = 0;
+    while ((bits = read_bit(in, &bit)) > 0) {
           if(pos == h.file_size){
             break;
           }
@@ -81,7 +79,7 @@ int main(int argc, char **argv) {
             } else {
                 curr = curr->left;
             }
-        } else {
+        } if(bit == 1) {
             if (curr->right == NULL) {
                 write_bytes(out, &(curr->symbol), 1);
                 curr = root;
