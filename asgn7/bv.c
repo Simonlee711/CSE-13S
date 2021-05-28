@@ -64,8 +64,8 @@ uint8_t bv_get_bit(BitVector *v, uint32_t i) {
 
 //same as asgn5
 void bv_print(BitVector *v) {
+    printf("BLOOM FILTER:\n");
     for (int i = 32; i > 0; i--) {
         printf("%d", bv_get_bit(v, i));
     }
 }
-
