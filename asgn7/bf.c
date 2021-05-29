@@ -1,7 +1,7 @@
 #include "bf.h"
 
-#include "bv.c"
-#include "speck.c"
+#include "bv.h"
+#include "speck.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -51,23 +51,23 @@ uint32_t bf_size(BloomFilter *bf) {
 //Sahiti's Section logic
 void bf_insert(BloomFilter *bf, char *oldspeak) {
     //hash and set salts to specifed bits
-    uint64_t index1 = hash(bf->primary, oldspeak) % bf_size(bf->filter);
+    uint64_t index1 = hash(bf->primary, oldspeak) % bf_size(bf);
     bv_set_bit(bf->filter, index1);
-    uint64_t index2 = hash(bf->secondary, oldspeak) % bf_size(bf->filter);
+    uint64_t index2 = hash(bf->secondary, oldspeak) % bf_size(bf);
     bv_set_bit(bf->filter, index2);
-    uint64_t index3 = hash(bf->tertiary, oldspeak) % bf_size(bf->filter);
+    uint64_t index3 = hash(bf->tertiary, oldspeak) % bf_size(bf);
     bv_set_bit(bf->filter, index3);
 }
 
 //Sahiti's section logic
 bool bf_probe(BloomFilter *bf, char *oldspeak) {
     //hash and see if salts are set
-    uint64_t index1 = hash(bf->primary, oldspeak) % bf_size(bf->filter);
+    uint64_t index1 = hash(bf->primary, oldspeak) % bf_size(bf);
     uint64_t first = bv_get_bit(bf->filter, index1);
-    uint64_t index2 = hash(bf->secondary, oldspeak) % bf_size(bf->filter);
-    uint64_t sec = _get_bit(bf->filter, index2);
-    uint64_t index3 = hash(bf->tertiary, oldspeak) % bf_size(bf->filter);
-    uint64_t thrid = bv_get_bit(bf->filter, index3);
+    uint64_t index2 = hash(bf->secondary, oldspeak) % bf_size(bf);
+    uint64_t sec = bv_get_bit(bf->filter, index2);
+    uint64_t index3 = hash(bf->tertiary, oldspeak) % bf_size(bf);
+    uint64_t third = bv_get_bit(bf->filter, index3);
     if ((first != 0) && (sec != 0) && (third != 0)) {
         return true;
     }
@@ -76,13 +76,13 @@ bool bf_probe(BloomFilter *bf, char *oldspeak) {
 
 //Sabrina's section logic
 uint32_t bf_count(BloomFilter *bf) {
-  uint32_t counter = 0;
-  for(int i = 0; i < bv_length(bf); i++){
-    if(bf->filter[i] != 0){
-      counter += 1;
+    uint32_t counter = 0;
+    for (uint32_t i = 0; i < bv_length(bf->filter); i++) {
+        if (bv_get_bit(bf->filter, i) != 0) {
+            counter += 1;
+        }
     }
-  }
-  return counter;
+    return counter;
 }
 
 void bf_print(BloomFilter *bf) {

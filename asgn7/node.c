@@ -4,29 +4,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 //strdup function - Sabrina's section
-char *strdup(char *string) {
+char *str_dup(char *string) {
     char *pointer; //intializing empty pointer to return
-    uint32_t length = strlen(string) + 1; //the goat jloritz from discord helped me here
+    uint32_t length = strlen(string) + 1; //jloritz from discord helped me here
     pointer = (char *) malloc(length);
     if (!pointer) {
         free(pointer);
         pointer = NULL;
         return NULL;
     }
-    strcopy(pointer, string);
+    strcpy(pointer, string);
     return pointer;
 }
 
 Node *node_create(char *oldspeak, char *newspeak) {
     Node *n = (Node *) malloc(sizeof(Node));
     if (n) {
-        n->oldspeak = strdup(oldspeak);
-        n->newspeak = strdup(newspeak);
+        n->oldspeak = str_dup(oldspeak);
+        n->newspeak = str_dup(newspeak);
         n->next = NULL;
         n->prev = NULL;
     }
+    return n;
 }
 
 void node_delete(Node **n) {

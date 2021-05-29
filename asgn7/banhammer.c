@@ -1,3 +1,11 @@
+#include "bf.h"
+#include "bv.h"
+#include "ht.h"
+#include "ll.h"
+#include "node.h"
+#include "parser.h"
+#include "speck.h"
+
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -11,7 +19,6 @@
 
 int main(int argc, char **argv) {
     int opt = 0;
-    FILE *in = stdin, *out = stdout;
     uint64_t ht_size = 10000;
     uint64_t bf_size = 1048576;
     int statistics = 0;
@@ -41,3 +48,19 @@ int main(int argc, char **argv) {
         case 's': statistics = 1; break;
         }
     }
+    //Brians section logic
+    //create hash table and bloom filter
+    HashTable *ht = ht_create(ht_size, mtf);
+    if (ht == NULL) {
+        printf("failed to allocate memory for hash table\n");
+        return 0;
+    }
+
+    BloomFilter *bf = bf_create(bf_size);
+    if (bf == NULL) {
+        printf("failed to allocate memory for Bloom Filter\n");
+        return 0;
+    }
+
+    //read in badspeak and newspeak
+}

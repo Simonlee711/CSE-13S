@@ -1,6 +1,7 @@
 #include "ht.h"
 
 #include "ll.h"
+#include "speck.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -63,13 +64,13 @@ void ht_insert(HashTable *ht, char *oldspeak, char *newspeak) {
 }
 
 uint32_t ht_count(HashTable *ht) {
-  uint32_t counter = 0;
-  for(int i = 0; i < ht_size(ht); i++){
-    if(ht->lists[i] != NULL){
-      counter += 1;
+    uint32_t counter = 0;
+    for (uint32_t i = 0; i < ht_size(ht); i++) {
+        if (ht->lists[i] != NULL) {
+            counter += 1;
+        }
     }
-  }
-  return counter;
+    return counter;
 }
 
 void ht_print(HashTable *ht) {

@@ -13,24 +13,24 @@ struct LinkedList {
 };
 
 LinkedList *ll_create(bool mtf) {
-    LinkedList *ll = (LinkedList *)malloc(sizeof(LinkedList));
-    if(ll){
-      ll->length = length;
-      ll->head = node_create(NULL, NULL);
-      ll->tail = node_create(NULL, NULL);
-      ll->head->next = ll->tail;
-      ll->tail->prev = ll->head;
-      ll->mtf = mtf;
+    LinkedList *ll = (LinkedList *) malloc(sizeof(LinkedList));
+    if (ll) {
+        ll->length = 0;
+        ll->head = node_create(NULL, NULL);
+        ll->tail = node_create(NULL, NULL);
+        ll->head->next = ll->tail;
+        ll->tail->prev = ll->head;
+        ll->mtf = mtf;
     }
     return ll;
 }
 
 //Sabrina's section logic
 void ll_delete(LinkedList **ll) {
-    for(Node *temp = (*ll)->head->next; temp < != NULL; temp = temp->next){
-        if(temp != NULL){
-           node_delete(&(temp->prev)); //deletes every previous node
-        }   
+    for (Node *temp = (*ll)->head->next; temp != NULL; temp = temp->next) {
+        if (temp != NULL) {
+            node_delete(&(temp->prev)); //deletes every previous node
+        }
     }
     node_delete(&((*ll)->tail)); //deletes the tail node because it never got freed
     free(*ll);
@@ -43,17 +43,17 @@ uint32_t ll_length(LinkedList *ll) {
 
 //Sabrinas section logic
 Node *ll_lookup(LinkedList *ll, char *oldspeak) {
-    for(Node *n = ll->head->next; n != n->tail; n->next){
-        if(strcmp(n->oldspeak, ll->oldspeak) == 0){
-          if(ll->mtf == 1){
-            n->prev->next = n->next;
-            n->next->prev = n->prev;
-            n->next = ll->head->next;
-            n->prev = ll->head;
-            ll->head->next->prev = n;
-            ll->head->next = n;
-          }
-          return n;
+    for (Node *n = ll->head->next; n != ll->tail; n = n->next) {
+        if (strcmp(n->oldspeak, oldspeak) == 0) {
+            if (ll->mtf == 1) {
+                n->prev->next = n->next;
+                n->next->prev = n->prev;
+                n->next = ll->head->next;
+                n->prev = ll->head;
+                ll->head->next->prev = n;
+                ll->head->next = n;
+            }
+            return n;
         }
     }
     return NULL;
@@ -61,11 +61,17 @@ Node *ll_lookup(LinkedList *ll, char *oldspeak) {
 
 //Sabrina's section logic
 void ll_insert(LinkedList *ll, char *oldspeak, char *newspeak) {
-      if(ll_lookup(ll, oldspeak) != NULL){
-          return NULL;
-      }
-      Node *nn = node_create(oldspeak, newspeak); //nn stands for new node to insert into the linked list
-      
+    if (ll_lookup(ll, oldspeak) != NULL) {
+        return;
+    }
+    Node *nn
+        = node_create(oldspeak, newspeak); //nn stands for new node to insert into the linked list
+    nn->next = ll->head->next;
+    nn->prev = ll->head;
+    ll->head->next->prev = nn;
+    ll->head->next = nn;
+    ll->length += 1;
+    return;
 }
 
 void ll_print(LinkedList *ll) {
