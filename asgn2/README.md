@@ -55,12 +55,5 @@ WHAT TO PUT IN TERMINAL
 make
 ```
 ```
-****key****
-a - all
-s - sine
-c - cosine
-t - tangent
-l - logarithm
-
 ./mathlib-test [-a][-s][-c][-t][-l]
 ```
