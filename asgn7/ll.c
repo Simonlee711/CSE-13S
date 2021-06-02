@@ -40,48 +40,46 @@ void ll_delete(LinkedList **ll) {
         *ll = NULL;
     }
 }
-    uint32_t ll_length(LinkedList * ll) {
-        return ll->length;
-    }
+uint32_t ll_length(LinkedList *ll) {
+    return ll->length;
+}
 
-    //Sabrinas section logic
-    Node *ll_lookup(LinkedList * ll, char *oldspeak) {
-	seeks += 1;
-        for (Node *n = ll->head->next; n != ll->tail; n = n->next) {
-	    seeks += 1;
-            if (strcmp(n->oldspeak, oldspeak) == 0) {
-                seeks += 1;
-                if (ll->mtf == 1) {
-                    n->prev->next = n->next;
-                    n->next->prev = n->prev;
-                    n->next = ll->head->next;
-                    n->prev = ll->head;
-                    ll->head->next->prev = n;
-                    ll->head->next = n;
-                }
-                return n;
+//Sabrinas section logic
+Node *ll_lookup(LinkedList *ll, char *oldspeak) {
+    seeks += 1;
+    for (Node *n = ll->head->next; n != ll->tail; n = n->next, links += 1) { //Sahiti helped me with the links counter in Office hours
+        if (strcmp(n->oldspeak, oldspeak) == 0) {
+            if (ll->mtf == 1) {
+                n->prev->next = n->next;
+                n->next->prev = n->prev;
+                n->next = ll->head->next;
+                n->prev = ll->head;
+                ll->head->next->prev = n;
+                ll->head->next = n;
             }
+            return n;
         }
-        return NULL;
     }
+    return NULL;
+}
 
-    //Sabrina's section logic
-    void ll_insert(LinkedList * ll, char *oldspeak, char *newspeak) {
-        if (ll_lookup(ll, oldspeak) != NULL) {
-            return;
-        }
-        Node *nn = node_create(
-            oldspeak, newspeak); //nn stands for new node to insert into the linked list
-        nn->next = ll->head->next;
-        nn->prev = ll->head;
-        ll->head->next->prev = nn;
-        ll->head->next = nn;
-        ll->length += 1;
+//Sabrina's section logic
+void ll_insert(LinkedList *ll, char *oldspeak, char *newspeak) {
+    if (ll_lookup(ll, oldspeak) != NULL) {
         return;
     }
+    Node *nn
+        = node_create(oldspeak, newspeak); //nn stands for new node to insert into the linked list
+    nn->next = ll->head->next;
+    nn->prev = ll->head;
+    ll->head->next->prev = nn;
+    ll->head->next = nn;
+    ll->length += 1;
+    return;
+}
 
-    void ll_print(LinkedList * ll) {
-        for (Node *i = ll->head->next; i != ll->tail; i = i->next) { //same iteration as delete ll
-            node_print(i);
-        }
+void ll_print(LinkedList *ll) {
+    for (Node *i = ll->head->next; i != ll->tail; i = i->next) { //same iteration as delete ll
+        node_print(i);
     }
+}

@@ -18,17 +18,17 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define ONE_KB     1024
+#define ONE_KB 1024
 //Eugene covered alot of regex and helped me figure this out
-#define VALID_WORD "[A-Za-z0-9]+(('|-)[A-Za-z0-9]+)*" 
+#define VALID_WORD "[A-Za-z0-9]+(('|-)[A-Za-z0-9]+)*"
 #define OPTIONS    "ht:f:ms"
 uint64_t links;
 uint64_t seeks;
 
 int main(int argc, char **argv) {
     int opt = 0;
-    uint64_t ht_size = 10000;
-    uint64_t bf_size = 1048576;
+    uint64_t ht_cur_size = 10000;
+    uint64_t bf_cur_size = 1048576;
     int statistics = 0;
     int mtf = 0;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
@@ -47,10 +47,10 @@ int main(int argc, char **argv) {
             printf("  -f size      Specify Bloom filter size (default: 2^20).\n");
             return 0;
         case 't':
-            ht_size = atoi(optarg); //from asgn3
+            ht_cur_size = atoi(optarg); //from asgn3
             break;
         case 'f':
-            bf_size = atoi(optarg); //from asgn3
+            bf_cur_size = atoi(optarg); //from asgn3
             break;
         case 'm': mtf = 1; break;
         case 's': statistics = 1; break;
@@ -58,13 +58,13 @@ int main(int argc, char **argv) {
     }
     //Brians section logic
     //create hash table and bloom filter
-    HashTable *ht = ht_create(ht_size, mtf);
+    HashTable *ht = ht_create(ht_cur_size, mtf);
     if (ht == NULL) {
         printf("failed to allocate memory for hash table\n");
         return 0;
     }
 
-    BloomFilter *bf = bf_create(bf_size);
+    BloomFilter *bf = bf_create(bf_cur_size);
     if (bf == NULL) {
         printf("failed to allocate memory for Bloom Filter\n");
         return 0;
@@ -135,19 +135,19 @@ int main(int argc, char **argv) {
             ll_insert(forbidden_words, bad_old->oldspeak, bad_old->newspeak);
         }
     }
-    
+
     //for printing statistics of the program
     if (statistics == 1) {
-	printf("Seeks: %lu\n", seeks);	
-        float avg = links / seeks;
+        printf("Seeks: %lu\n", seeks);
+        float avg = ((float)links) / ((float)seeks);
         printf("Average seek length: %0.6f\n", avg);
-        //float ht_pct = ((ht_count(ht)) / (ht_size(ht)));
-        //printf("Hash Table load: %0.6f%%\n", ht_pct);
-        //float bf_pct = bf_count(bf) /  bf_size(bf);
-	//printf("Bloom filter load: %0.6f%%\n", bf_pct);
+        float ht_pct = (((float)ht_count(ht)) / ((float)ht_size(ht))) * 100.0;
+        printf("Hash Table load: %f%%\n", ht_pct);
+        float bf_pct = (((float)bf_count(bf)) / ((float)bf_size(bf))) * 100.0;
+        printf("Bloom filter load: %0.6f%%\n", bf_pct);
         return 0;
     }
-    
+
     //messages per situation
     //situation 1 - fix oldspeak and make them newspeak
     if ((old_word_counter > 0) && (bad_word_counter == 0)) {
@@ -165,7 +165,6 @@ int main(int argc, char **argv) {
         ll_print(forbidden_words);
         ll_print(replaceable_words);
     }
-
 
     //close files and free memory
     fclose(badspeak);
