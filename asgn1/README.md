@@ -34,4 +34,9 @@ note that if you run the same seed everytime you will get the
 same output. Lastly you will be asked to prompt a number of 
 players in the program. So you will be asked to put a number
 with atleast 2 and at most 14. Then the game shall begin and
-you may proceed.
+you may proceed. Refer to the bottom to see the format.
+
+```
+make
+./lrc 
+```
