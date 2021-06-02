@@ -48,3 +48,14 @@ be called and printed for its values from -1 to 1, then arcCos will be
 called and printed for its values from -1, to 1, etc. That is what is 
 essentially happening in this mathlib-test.c file and there we go. We
 have successfully implemented this program!
+
+```
+****key****
+a - all
+s - sine
+c - cosine
+t - tangent
+l - logarithm
+
+./mathlib-test [-a][-s][-c][-t][-l]
+```
