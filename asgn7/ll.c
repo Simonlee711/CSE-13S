@@ -47,7 +47,8 @@ uint32_t ll_length(LinkedList *ll) {
 //Sabrinas section logic
 Node *ll_lookup(LinkedList *ll, char *oldspeak) {
     seeks += 1;
-    for (Node *n = ll->head->next; n != ll->tail; n = n->next, links += 1) { //Sahiti helped me with the links counter in Office hours
+    for (Node *n = ll->head->next; n != ll->tail;
+         n = n->next, links += 1) { //Sahiti helped me with the links counter in Office hours
         if (strcmp(n->oldspeak, oldspeak) == 0) {
             if (ll->mtf == 1) {
                 n->prev->next = n->next;

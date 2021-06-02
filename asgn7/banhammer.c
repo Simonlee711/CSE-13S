@@ -139,11 +139,11 @@ int main(int argc, char **argv) {
     //for printing statistics of the program
     if (statistics == 1) {
         printf("Seeks: %lu\n", seeks);
-        float avg = ((float)links) / ((float)seeks);
+        float avg = ((float) links) / ((float) seeks);
         printf("Average seek length: %0.6f\n", avg);
-        float ht_pct = (((float)ht_count(ht)) / ((float)ht_size(ht))) * 100.0;
+        float ht_pct = (((float) ht_count(ht)) / ((float) ht_size(ht))) * 100.0;
         printf("Hash Table load: %f%%\n", ht_pct);
-        float bf_pct = (((float)bf_count(bf)) / ((float)bf_size(bf))) * 100.0;
+        float bf_pct = (((float) bf_count(bf)) / ((float) bf_size(bf))) * 100.0;
         printf("Bloom filter load: %0.6f%%\n", bf_pct);
         return 0;
     }
