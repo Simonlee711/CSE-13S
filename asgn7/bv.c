@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//SGT Tutoring William Dai helped us make BitVector
-
 struct BitVector {
     uint32_t length;
     uint8_t *vector;
@@ -16,7 +14,8 @@ BitVector *bv_create(uint32_t length) {
     BitVector *v = (BitVector *) calloc(1, sizeof(BitVector));
     if (v) {
         v->length = length;
-        uint8_t size = length % 8 == 0 ? length / 8 : (length / 8) + 1;
+        //uint8_t size = length % 8 == 0 ? (length / 8) : (length / 8) + 1;
+        uint32_t size = length;
         v->vector = (uint8_t *) calloc(size, sizeof(uint8_t));
         if (!v->vector) {
             exit(0);
@@ -48,12 +47,6 @@ void bv_set_bit(BitVector *v, uint32_t i) {
 //same as asgn5
 void bv_clr_bit(BitVector *v, uint32_t i) {
     (v->vector[i / 8] &= ~(1 << (i % 8)));
-    return;
-}
-
-//same as asgn5
-void bv_xor_bit(BitVector *v, uint32_t i, uint8_t bit) {
-    (v->vector[i / 8] ^= (bit << (i % 8)));
     return;
 }
 

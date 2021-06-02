@@ -51,23 +51,23 @@ uint32_t bf_size(BloomFilter *bf) {
 //Sahiti's Section logic
 void bf_insert(BloomFilter *bf, char *oldspeak) {
     //hash and set salts to specifed bits
-    uint64_t index1 = hash(bf->primary, oldspeak) % bf_size(bf);
+    uint32_t index1 = hash(bf->primary, oldspeak) % bf_size(bf);
     bv_set_bit(bf->filter, index1);
-    uint64_t index2 = hash(bf->secondary, oldspeak) % bf_size(bf);
+    uint32_t index2 = hash(bf->secondary, oldspeak) % bf_size(bf);
     bv_set_bit(bf->filter, index2);
-    uint64_t index3 = hash(bf->tertiary, oldspeak) % bf_size(bf);
+    uint32_t index3 = hash(bf->tertiary, oldspeak) % bf_size(bf);
     bv_set_bit(bf->filter, index3);
 }
 
 //Sahiti's section logic
 bool bf_probe(BloomFilter *bf, char *oldspeak) {
     //hash and see if salts are set
-    uint64_t index1 = hash(bf->primary, oldspeak) % bf_size(bf);
-    uint64_t first = bv_get_bit(bf->filter, index1);
-    uint64_t index2 = hash(bf->secondary, oldspeak) % bf_size(bf);
-    uint64_t sec = bv_get_bit(bf->filter, index2);
-    uint64_t index3 = hash(bf->tertiary, oldspeak) % bf_size(bf);
-    uint64_t third = bv_get_bit(bf->filter, index3);
+    uint32_t index1 = hash(bf->primary, oldspeak) % bf_size(bf);
+    uint32_t first = bv_get_bit(bf->filter, index1);
+    uint32_t index2 = hash(bf->secondary, oldspeak) % bf_size(bf);
+    uint32_t sec = bv_get_bit(bf->filter, index2);
+    uint32_t index3 = hash(bf->tertiary, oldspeak) % bf_size(bf);
+    uint32_t third = bv_get_bit(bf->filter, index3);
     if ((first != 0) && (sec != 0) && (third != 0)) {
         return true;
     }

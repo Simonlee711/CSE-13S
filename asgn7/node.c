@@ -8,14 +8,14 @@
 
 //strdup function - Sabrina's section
 char *str_dup(char *string) {
+    //seg faults if you allocate space for a null value. MUST HAVE THIS CHECK
+    //caused me alot of time feeling dumb >:(
+    if (string == NULL) {
+        return NULL;
+    }
     char *pointer; //intializing empty pointer to return
     uint32_t length = strlen(string) + 1; //jloritz from discord helped me here
     pointer = (char *) malloc(length);
-    if (!pointer) {
-        free(pointer);
-        pointer = NULL;
-        return NULL;
-    }
     strcpy(pointer, string);
     return pointer;
 }
