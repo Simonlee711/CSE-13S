@@ -6,6 +6,7 @@ to expect in each directory and how to run each one will be in each
 README.md in the selected repositories. 
 
 ```
+asgn0 - Hello World
 asgn1 - Left Right Center
 asgn2 - A Small Numerical Library
 asgn3 - Sorting (Bubble, Shell, Quicksort(s))
