@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
             printf("  A Huffman encoder.\n");
             printf("  Compresses a file using the Huffman coding algorithm.\n\n");
             printf("USAGE\n");
-            printf("  ./encode [-h] [-i infile] [-o outfile]\n\n");
+            printf("  ./encode [-h] [-v] [-i infile] [-o outfile]\n\n");
             printf("OPTIONS\n");
             printf("  -h             Program usage and help.\n");
             printf("  -v             Print compression statistics.\n");

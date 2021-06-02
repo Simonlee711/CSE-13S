@@ -40,6 +40,15 @@ table load, and bloom filter load. All these features will be simply printed to 
 and if you are curious as to what everything means you may read more about it in my 
 WRITEUP.pdf which is also somewhere in the repository
 
+WHAT TO PUT IN TERMINAL
+-----------------------
+```
+make
+```
+```
+./banhammer [-h] [-s] [-m] [-t size] [-f size]
+```
+
 FINAL THOUGHTS
 ---------------
 Its been quite the eventful journey in this class. These past 7 assignments have been some of the

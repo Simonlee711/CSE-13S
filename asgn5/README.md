@@ -34,3 +34,17 @@ we could put which is -h helper message, -i to read a specified in file
 and -o to write to a specified outfile. And in ./decode we have the same
 thing as encode but with an additional -v verbose which prints out the
 statistics for the file. 
+
+WHAT TO PUT IN TERMINAL
+-----------------------
+```
+make
+```
+```
+//to run encoder
+./encode [-h] [-i infile] [-o outfile]
+```
+```
+//to run decoder
+./decode [-h] [-v] [-i infile] [-o outfile]
+```

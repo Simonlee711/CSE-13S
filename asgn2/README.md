@@ -49,6 +49,11 @@ called and printed for its values from -1, to 1, etc. That is what is
 essentially happening in this mathlib-test.c file and there we go. We
 have successfully implemented this program!
 
+WHAT TO PUT IN TERMINAL
+-----------------------
+```
+make
+```
 ```
 ****key****
 a - all

@@ -48,3 +48,12 @@ with a few minor errors including the one mentioned at the end of the
 (PROGRAM DESCRIPTION), I am happy with the result. This class has been ridiculouly
 challenging but after completing these assignments, I do feel alot of satisfaction
 for the hard work I put in. cool beans!
+
+WHAT TO PUT IN TERMINAL
+-----------------------
+```
+make
+```
+```
+./tsp [-u] [-v] [-h] [-i infile] [-o outfile]
+```

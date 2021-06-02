@@ -44,3 +44,12 @@ You can run multiple commands at a time but you will need atleast one of
 the sorts to be included or no output will be displayed. This assignment
 was one of my favorites to implement and I am excited to have finally gotten
 to do a sorting program.
+
+WHAT TO PUT IN TERMINAL
+-----------------------
+```
+make
+```
+```
+./sorting [-a][-b][-s][-q][-Q]
+```

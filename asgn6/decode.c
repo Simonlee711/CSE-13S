@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
             printf("  A Huffman decoder.\n");
             printf("  Decompresses a file using the Huffman coding algorithm.\n\n");
             printf("USAGE\n");
-            printf("  ./decode [-h] [-i infile] [-o outfile]\n\n");
+            printf("  ./decode [-h] [-v] [-i infile] [-o outfile]\n\n");
             printf("OPTIONS\n");
             printf("  -h             Program usage and help.\n");
             printf("  -v             Print decompression statistics.\n");

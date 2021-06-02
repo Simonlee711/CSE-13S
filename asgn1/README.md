@@ -36,7 +36,11 @@ players in the program. So you will be asked to put a number
 with atleast 2 and at most 14. Then the game shall begin and
 you may proceed. Refer to the bottom to see the format.
 
+WHAT TO PUT IN TERMINAL
+----------------------
 ```
 make
+```
+```
 ./lrc 
 ```

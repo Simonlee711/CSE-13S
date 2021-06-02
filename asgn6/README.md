@@ -47,3 +47,17 @@ input. Next we have -o which takes in a specific output and if none are specifie
 printed to standard output. and lastley we have -v which is verbose which will print the
 statistics for the compression that took place. Very cool assignment overall and I cannot
 wait for you all to try it.
+
+WHAT TO PUT IN TERMINAL
+-----------------------
+```
+make
+```
+```
+//to run encoder
+./encode [-h] [-v] [-i infile] [-o outfile]
+```
+```
+//to run decoder
+./decode [-h] [-v] [-i infile] [-o outfile]
+```
