@@ -65,5 +65,5 @@ connection and friends you normally make in class. I am very much about document
 may be weird but Overall 11/10 experience. Great class. highly recommend and just feeling grateful
 and smarter than I was a quarter ago :) 
 
--june/4/2021
+-june/3/2021
 -Simon Lee
