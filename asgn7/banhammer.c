@@ -48,9 +48,17 @@ int main(int argc, char **argv) {
             return 0;
         case 't':
             ht_cur_size = atoi(optarg); //from asgn3
+            if (ht_cur_size < 10000) {
+                printf("failed to allocate memory for hash table\n");
+                return 0;
+            }
             break;
         case 'f':
             bf_cur_size = atoi(optarg); //from asgn3
+            if (bf_cur_size < 1048576) {
+                printf("failed to allocate memory for bloom filter\n");
+                return 0;
+            }
             break;
         case 'm': mtf = 1; break;
         case 's': statistics = 1; break;
